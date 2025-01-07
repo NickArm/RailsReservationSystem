@@ -45,7 +45,8 @@ module AdminPanel
       end
 
       def customer_params
-        params.require(:customer).permit(:name, :email, :phone, :address, :country)
+        params.require(:customer).permit(:name, :email, :phone, :address, :country, :city, :zip_code)
       end
+
     end
 end

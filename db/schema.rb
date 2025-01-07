@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_06_185635) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_07_114443) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -56,6 +56,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_06_185635) do
     t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "city"
+    t.string "zip_code"
   end
 
   create_table "payment_methods", force: :cascade do |t|

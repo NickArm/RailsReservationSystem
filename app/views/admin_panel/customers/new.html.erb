@@ -29,6 +29,16 @@
           <%= form.label :country, "Country", class: "form-label" %>
           <%= form.text_field :country, class: "form-control", placeholder: "Enter customer country" %>
         </div>
+        <div class="mb-3">
+          <%= form.label :city, "City", class: "form-label" %>
+          <%= form.text_field :city, class: "form-control", placeholder: "Enter city" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :zip_code, "ZIP Code", class: "form-label" %>
+          <%= form.text_field :zip_code, class: "form-control", placeholder: "Enter ZIP code" %>
+        </div>
+
         <div class="text-center">
           <%= form.submit "Create Customer", class: "btn btn-success btn-lg w-100" %>
         </div>
