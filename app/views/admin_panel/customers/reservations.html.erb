@@ -1,0 +1,38 @@
+<div class="container mt-5">
+  <h1 class="mb-4">
+    <i class="bi bi-person-circle text-primary"></i> Reservations for <%= @customer.name %>
+  </h1>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Guest Count</th>
+        <th>Total Price</th>
+        <th>Payment Method</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reservations.each do |reservation| %>
+        <tr>
+          <td><%= reservation.property.name %></td>
+          <td><%= reservation.start_date.strftime('%Y-%m-%d') %></td>
+          <td><%= reservation.end_date.strftime('%Y-%m-%d') %></td>
+          <td><%= reservation.guest_count %></td>
+          <td><%= number_to_currency(reservation.total_price) %></td>
+          <td><%= reservation.payment_method&.name || "N/A" %></td>
+          <td><%= reservation.status %></td>
+          <td>
+            <%= link_to "View", admin_panel_booking_path(reservation), class: "btn btn-primary btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to "Back to Customers", admin_panel_customers_path, class: "btn btn-secondary mt-3" %>
+</div>

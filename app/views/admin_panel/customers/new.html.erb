@@ -1,0 +1,38 @@
+<div class="container mt-5">
+  <h1 class="mb-4">
+    <i class="bi bi-person-plus-fill text-primary"></i> Add New Customer
+  </h1>
+
+  <%= form_with model: @customer, url: admin_panel_customers_path, local: true do |form| %>
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Customer Information</h4>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <%= form.label :name, "Name", class: "form-label" %>
+          <%= form.text_field :name, class: "form-control", placeholder: "Enter customer name" %>
+        </div>
+        <div class="mb-3">
+          <%= form.label :email, "Email", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", placeholder: "Enter customer email" %>
+        </div>
+        <div class="mb-3">
+          <%= form.label :phone, "Phone", class: "form-label" %>
+          <%= form.text_field :phone, class: "form-control", placeholder: "Enter customer phone" %>
+        </div>
+        <div class="mb-3">
+          <%= form.label :address, "Address", class: "form-label" %>
+          <%= form.text_area :address, class: "form-control", placeholder: "Enter customer address" %>
+        </div>
+        <div class="mb-3">
+          <%= form.label :country, "Country", class: "form-label" %>
+          <%= form.text_field :country, class: "form-control", placeholder: "Enter customer country" %>
+        </div>
+        <div class="text-center">
+          <%= form.submit "Create Customer", class: "btn btn-success btn-lg w-100" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

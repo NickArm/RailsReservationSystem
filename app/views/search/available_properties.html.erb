@@ -1,0 +1,27 @@
+<div class="container mt-5">
+  <h2>Available Houses</h2>
+  <p>Select a house to proceed with booking:</p>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Max Guests</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @properties.each do |property| %>
+        <tr>
+          <td><%= property.name %></td>
+          <td><%= property.address %></td>
+          <td><%= property.max_guests %></td>
+          <td>
+            <%= link_to "Book Now", new_property_booking_path(property, start_date: params[:start_date], end_date: params[:end_date]), class: "btn btn-primary" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

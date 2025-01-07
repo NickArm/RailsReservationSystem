@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  email: MyString
+  phone: MyString
+  address: MyText
+  property: one
+  start_date: 2025-01-05
+  end_date: 2025-01-05
+  guest_count: 1
+  status: MyString
+
+two:
+  name: MyString
+  email: MyString
+  phone: MyString
+  address: MyText
+  property: two
+  start_date: 2025-01-05
+  end_date: 2025-01-05
+  guest_count: 1
+  status: MyString

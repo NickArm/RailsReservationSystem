@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <h1>Reservation Successful</h1>
+  <p>Thank you for your reservation!</p>
+
+  <h2>Booking Details</h2>
+  <ul>
+    <li><strong>Name:</strong> <%= @booking.customer.name %></li>
+    <li><strong>Email:</strong> <%= @booking.customer.email %></li>
+    <li><strong>Phone:</strong> <%= @booking.customer.phone %></li>
+    <li><strong>Start Date:</strong> <%= @booking.start_date %></li>
+    <li><strong>End Date:</strong> <%= @booking.end_date %></li>
+    <li><strong>Guests:</strong> <%= @booking.guest_count %></li>
+  </ul>
+
+  <h2>House Details</h2>
+  <ul>
+    <li><strong>Property Name:</strong> <%= @property.name %></li>
+    <li><strong>Address:</strong> <%= @property.address %></li>
+    <li><strong>Max Guests:</strong> <%= @property.max_guests %></li>
+  </ul>
+
+  <%= link_to 'Back to Properties', properties_path, class: 'btn btn-primary' %>
+</div>

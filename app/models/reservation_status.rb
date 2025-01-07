@@ -1,0 +1,2 @@
+class ReservationStatus < ApplicationRecord
+end

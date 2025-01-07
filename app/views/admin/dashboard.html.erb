@@ -1,0 +1,60 @@
+<div class="container mt-5">
+  <h1>Welcome, <%= current_admin.email %>!</h1>
+  <p>Here are your properties:</p>
+
+  <%= link_to "Add New Property", new_admin_panel_property_path, class: "btn btn-success mb-3" %>
+  <%= link_to "View All Bookings", admin_panel_bookings_path, class: "btn btn-info mb-3" %>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Max Guests</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @properties.each do |property| %>
+        <tr>
+          <td><%= property.name %></td>
+          <td><%= property.address %></td>
+          <td><%= property.max_guests %></td>
+          <td>
+            <%= link_to "View", admin_panel_property_path(property), class: "btn btn-primary btn-sm" %>
+            <%= link_to "Edit", edit_admin_panel_property_path(property), class: "btn btn-warning btn-sm" %>
+            <%= link_to "Delete", admin_panel_property_path(property), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h2 class="mt-5">Upcoming Bookings</h2>
+  <p>The next 5 bookings in the future:</p>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Guest Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @upcoming_bookings.each do |booking| %>
+        <tr>
+          <td><%= booking.property.name %></td>
+          <td><%= booking.customer.name %></td>
+          <td><%= booking.start_date.strftime("%Y-%m-%d") %></td>
+          <td><%= booking.end_date.strftime("%Y-%m-%d") %></td>
+          <td>
+            <%= link_to "View", admin_panel_booking_path(booking), class: "btn btn-primary btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

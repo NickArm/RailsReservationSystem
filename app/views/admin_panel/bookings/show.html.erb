@@ -1,0 +1,100 @@
+<!-- Content Header -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Booking Details</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="<%= admin_panel_bookings_path %>">Bookings</a></li>
+          <li class="breadcrumb-item active">Details</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Booking Details -->
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Booking Information</h3>
+          </div>
+          <div class="card-body">
+            <p><strong>Property:</strong> <%= @booking.property.name %></p>
+            <p><strong>Guest Name:</strong> <%= @booking.customer.name %></p>
+            <p><strong>Email:</strong> <%= @booking.customer.email %></p>
+            <p><strong>Phone:</strong> <%= @booking.customer.phone %></p>
+            <p><strong>Start Date:</strong> <%= @booking.start_date.strftime("%Y-%m-%d") %></p>
+            <p><strong>End Date:</strong> <%= @booking.end_date.strftime("%Y-%m-%d") %></p>
+            <p><strong>Guest Count:</strong> <%= @booking.guest_count %></p>
+            <p><strong>Status:</strong>
+              <span class="badge <%= status_badge_class(@booking.status) %>">
+             
+              </span>
+            </p>
+            <p><strong>Payment Method:</strong> <%= @booking.payment_method.name %></p>
+          </div>
+          <div class="card-footer">
+            <%= link_to "Edit", edit_admin_panel_booking_path(@booking), class: "btn btn-warning" %>
+            <%= link_to "Back to Bookings", admin_panel_bookings_path, class: "btn btn-secondary" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Breakdown -->
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Price Breakdown</h3>
+          </div>
+          <div class="card-body">
+            <% if @price_breakdown.present? %>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @price_breakdown.each do |entry| %>
+                    <tr>
+                      <td><%= entry[:date].strftime('%Y-%m-%d') %></td>
+                      <td><%= number_to_currency(entry[:price]) %></td>
+                    </tr>
+                  <% end %>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td><strong>Total Before Discount:</strong></td>
+                    <td><%= number_to_currency(@total_before_discount) %></td>
+                  </tr>
+                  <% if @discount.present? && @discount > 0 %>
+                    <tr>
+                      <td><strong>Discount Applied:</strong></td>
+                      <td><%= number_to_currency(@discount) %> (<%= @discount_type %>)</td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <td><strong>Total Price:</strong></td>
+                    <td class="text-success"><%= number_to_currency(@total_price) %></td>
+                  </tr>
+                </tfoot>
+              </table>
+            <% else %>
+              <p>No price breakdown available.</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

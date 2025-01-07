@@ -1,0 +1,96 @@
+inherit_from: .rubocop_todo.yml
+
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+# Overwrite or add rules to create your own house style
+#
+# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
+# Layout/SpaceInsideArrayLiteralBrackets:
+#   Enabled: false
+
+
+AllCops:
+  TargetRubyVersion: 3.0 # Change to match your Ruby version
+  NewCops: enable
+  Exclude:
+    - 'db/schema.rb' # Ignore schema file
+    - 'bin/**/*' # Ignore executables
+    - 'node_modules/**/*' # Ignore node modules
+    - 'vendor/**/*' # Ignore vendor files
+    - 'config/**/*' # Ignore Rails configuration files
+    - 'db/migrate/*' # Ignore migrate files
+
+Layout/LineLength:
+  Max: 120 # Max characters per line
+
+Layout/TrailingWhitespace:
+  Enabled: true # Ensure trailing whitespace is removed
+
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: true
+
+Layout/IndentationStyle:
+  EnforcedStyle: spaces # Enforce spaces instead of tabs
+
+Layout/IndentationWidth:
+  Width: 2 # Indentation level of 2 spaces
+
+Layout/EmptyLines:
+  Enabled: true
+
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*' # Ignore block length in specs
+    - 'test/**/*'
+
+Metrics/MethodLength:
+  Max: 10 # Max lines per method
+
+Metrics/ClassLength:
+  Max: 100 # Max lines per class
+
+Metrics/AbcSize:
+  Max: 15 # Max complexity for a method
+
+Metrics/ModuleLength:
+  Max: 150
+
+Rails:
+  Enabled: true # Enable Rails-specific rules
+
+Rails/SkipsModelValidations:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: false # Disable the requirement for `# frozen_string_literal: true`
+
+Style/Documentation:
+  Enabled: false # Disable documentation comments for classes and modules
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'Rakefile'
+    - '**/Gemfile'
+    - '**/*.gemspec'
+
+# Ignore unused variables in block parameters
+Lint/UnusedBlockArgument:
+  AllowedNames:
+    - _ # Allow variables prefixed with _
+
+Lint/UselessAssignment:
+  Enabled: true
+
+Bundler:
+  Enabled: true
+
+Rails/OutputSafety:
+  Enabled: true

@@ -1,0 +1,19 @@
+<div class="container mt-5">
+  <h1><%= @property.name %></h1>
+  <p><strong>Phone:</strong> <%= @property.phone %></p>
+  <p><strong>Address:</strong> <%= @property.address %></p>
+  <p><strong>Description:</strong> <%= @property.description %></p>
+  <p><strong>Country:</strong> <%= @property.country %></p>
+  <p><strong>Contact Email:</strong> <%= @property.contact_email %></p>
+  <p><strong>Max Guests:</strong> <%= @property.max_guests %></p>
+
+  <p><strong>Minimum Days of Stay:</strong> <%= @property.min_days_stay %></p>
+<p><strong>Maximum Days of Stay:</strong> <%= @property.max_days_stay %></p>
+<p><strong>Weekly Discount:</strong> <%= @property.weekly_discount %>%</p>
+<p><strong>Monthly Discount:</strong> <%= @property.monthly_discount %>%</p>
+
+
+  <%= link_to "Edit", edit_admin_panel_property_path(@property), class: "btn btn-warning" %>
+  <%= link_to "Delete", property_path(@property), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+    <%= link_to "Manage Calendar", property_calendars_path(@property), class: "btn btn-info" %>
+  </div>

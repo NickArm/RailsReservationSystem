@@ -1,0 +1,117 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4">
+    <i class="bi bi-house-door-fill text-primary"></i> Reserve <%= @property.name %>
+  </h1>
+
+  <div class="row">
+    <!-- Booking Form (70%) -->
+    <div class="col-lg-7">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-pencil-fill"></i> Booking Form
+          </h4>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: [@property, @booking], local: true) do |form| %>
+            <h5 class="mb-4">
+              <i class="bi bi-person-circle"></i> Guest Information
+            </h5>
+            <div class="mb-3">
+              <%= form.label :customer_name, "Your Name", class: "form-label" %>
+              <%= form.text_field :customer_name, class: "form-control", placeholder: "Enter your name" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label :customer_email, "Your Email", class: "form-label" %>
+              <%= form.email_field :customer_email, class: "form-control", placeholder: "Enter your email" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label :customer_phone, "Your Phone", class: "form-label" %>
+              <%= form.text_field :customer_phone, class: "form-control", placeholder: "Enter your phone number" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label :customer_address, "Your Address", class: "form-label" %>
+              <%= form.text_area :customer_address, class: "form-control", placeholder: "Enter your address" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label :customer_country, "Your Country", class: "form-label" %>
+              <%= form.text_field :customer_country, class: "form-control", placeholder: "Enter your country" %>
+            </div>
+
+            <h5 class="mt-4 mb-4">
+              <i class="bi bi-calendar-event"></i> Booking Dates
+            </h5>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <%= form.label :start_date, "Start Date", class: "form-label" %>
+                <%= form.date_field :start_date, value: @booking.start_date, class: "form-control" %>
+              </div>
+              <div class="col-md-6 mb-3">
+                <%= form.label :end_date, "End Date", class: "form-label" %>
+                <%= form.date_field :end_date, value: @booking.end_date, class: "form-control" %>
+              </div>
+            </div>
+
+            <h5 class="mt-4 mb-4">
+              <i class="bi bi-wallet2"></i> Payment Information
+            </h5>
+            <div class="mb-3">
+              <%= form.label :payment_method_id, "Payment Method", class: "form-label" %>
+              <%= form.collection_select :payment_method_id, PaymentMethod.all, :id, :name, {}, class: "form-control" %>
+            </div>
+
+            <div class="text-center mt-4">
+              <%= form.submit "Reserve Now", class: "btn btn-primary btn-lg w-100" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price Breakdown (30%) -->
+    <div class="col-lg-5">
+      <% if @total_price.present? %>
+        <div class="card shadow mb-4">
+          <div class="card-header bg-info text-white">
+            <h4 class="mb-0">
+              <i class="bi bi-receipt-cutoff"></i> Price Breakdown
+            </h4>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @price_breakdown.each do |entry| %>
+                  <tr>
+                    <td><%= entry[:date].strftime('%Y-%m-%d') %></td>
+                    <td><%= number_to_currency(entry[:price]) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <hr>
+
+            <% if @discount.present? && @discount > 0 %>
+              <p class="fs-5 mt-3">
+                <strong>Discount Applied:</strong> <span class="text-danger"><%= number_to_currency(@discount) %> (<%= @discount_type %>)</span>
+              </p>
+              <p class="fs-5 mt-3">
+                <strong>Total Before Discount:</strong> <%= number_to_currency(@total_before_discount) %>
+              </p>
+              <hr>
+            <% end %>
+
+            <p class="fs-5 mt-3">
+              <strong>Total Price:</strong> <span class="text-success"><%= number_to_currency(@total_price) %></span>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<%= form_with model: [:admin_panel, @property],  local: true, class: "needs-validation" do |f| %>
+  <div class="mb-3">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :phone, class: "form-label" %>
+    <%= f.text_field :phone, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :address, class: "form-label" %>
+    <%= f.text_field :address, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :description, class: "form-label" %>
+    <%= f.text_area :description, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :country, class: "form-label" %>
+    <%= f.text_field :country, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :contact_email, class: "form-label" %>
+    <%= f.email_field :contact_email, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :max_guests, class: "form-label" %>
+    <%= f.number_field :max_guests, class: "form-control" %>
+  </div>
+  <div class="form-group">
+  <%= f.label :min_days_stay, "Minimum Days of Stay" %>
+  <%= f.number_field :min_days_stay, class: "form-control", min: 1 %>
+</div>
+
+<div class="form-group">
+  <%= f.label :max_days_stay, "Maximum Days of Stay" %>
+  <%= f.number_field :max_days_stay, class: "form-control", min: 1 %>
+</div>
+
+<div class="form-group">
+  <%= f.label :weekly_discount, "Weekly Discount (%)" %>
+  <%= f.number_field :weekly_discount, class: "form-control", step: 0.01, min: 0, max: 100 %>
+</div>
+
+<div class="form-group">
+  <%= f.label :monthly_discount, "Monthly Discount (%)" %>
+  <%= f.number_field :monthly_discount, class: "form-control", step: 0.01, min: 0, max: 100 %>
+</div>
+
+  <%= f.submit "Create Property", class: "btn btn-primary" %>
+<% end %>

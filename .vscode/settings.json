@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "files.eol": "\n", // Ensure line endings are LF
+    "files.trimTrailingWhitespace": true, // Remove trailing whitespace
+    "files.insertFinalNewline": true // Add a final newline automatically
+}

@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title">Bookings</h3>
+    <a href="<%= new_admin_panel_booking_path %>" class="btn btn-sm btn-success">
+      <i class="fas fa-plus"></i> Add Booking
+    </a>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered table-hover text-center">
+      <thead class="thead-dark">
+        <tr>
+          <th style="width: 5%">#</th>
+          <th>Property</th>
+          <th>Guest Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th style="width: 15%">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @bookings.any? %>
+          <% @bookings.each_with_index do |booking, index| %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= booking.property.name %></td>
+              <td><%= booking.customer.name %></td>
+              <td><%= booking.email %></td>
+              <td><%= booking.phone %></td>
+              <td>
+                <span class="badge <%= status_badge_class(booking.status) %>">
+                  <%= booking.status.titleize %>
+                </span>
+              </td>
+              <td>
+                <a href="<%= edit_admin_panel_booking_path(booking) %>" class="btn btn-sm btn-primary">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <%= link_to admin_panel_booking_path(booking), method: :delete, class: "btn btn-sm btn-danger", data: { confirm: "Are you sure?" } do %>
+                  <i class="fas fa-trash"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="7">No bookings available</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
