@@ -54,6 +54,7 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'devise'
   gem 'rubocop-rails-omakase', require: false
+  gem 'toastr-rails'
 end
 
 group :development do

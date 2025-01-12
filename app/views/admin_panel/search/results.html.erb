@@ -1,0 +1,34 @@
+<div class="container mt-5">
+  <h1>Search Results</h1>
+
+  <% if @properties.any? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Max Guests</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @properties.each do |property| %>
+          <tr>
+            <td><%= property.name %></td>
+            <td><%= property.address %></td>
+            <td><%= property.max_guests %></td>
+            <td>
+              <%= link_to "Assign Booking", new_admin_panel_booking_path(property_id: property.id,
+                start_date: params[:start_date],
+                end_date: params[:end_date],
+                guest_count: params[:guest_count]),
+                class: "btn btn-primary btn-sm" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No properties match the search criteria.</p>
+  <% end %>
+</div>

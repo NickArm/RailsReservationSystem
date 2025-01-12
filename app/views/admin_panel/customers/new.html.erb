@@ -11,32 +11,32 @@
       <div class="card-body">
         <div class="mb-3">
           <%= form.label :name, "Name", class: "form-label" %>
-          <%= form.text_field :name, class: "form-control", placeholder: "Enter customer name" %>
+          <%= form.text_field :name, class: "form-control", placeholder: "Enter customer name", required: true %>
         </div>
         <div class="mb-3">
           <%= form.label :email, "Email", class: "form-label" %>
-          <%= form.email_field :email, class: "form-control", placeholder: "Enter customer email" %>
+          <%= form.email_field :email, class: "form-control", placeholder: "Enter customer email", required: true %>
         </div>
         <div class="mb-3">
           <%= form.label :phone, "Phone", class: "form-label" %>
-          <%= form.text_field :phone, class: "form-control", placeholder: "Enter customer phone" %>
+          <%= form.text_field :phone, class: "form-control", placeholder: "Enter customer phone", required: true %>
         </div>
         <div class="mb-3">
           <%= form.label :address, "Address", class: "form-label" %>
-          <%= form.text_area :address, class: "form-control", placeholder: "Enter customer address" %>
+          <%= form.text_area :address, class: "form-control", placeholder: "Enter customer address", required: true %>
         </div>
         <div class="mb-3">
           <%= form.label :country, "Country", class: "form-label" %>
-          <%= form.text_field :country, class: "form-control", placeholder: "Enter customer country" %>
+          <%= form.text_field :country, class: "form-control", placeholder: "Enter customer country", required: true %>
         </div>
         <div class="mb-3">
           <%= form.label :city, "City", class: "form-label" %>
-          <%= form.text_field :city, class: "form-control", placeholder: "Enter city" %>
+          <%= form.text_field :city, class: "form-control", placeholder: "Enter city", required: true %>
         </div>
 
         <div class="mb-3">
           <%= form.label :zip_code, "ZIP Code", class: "form-label" %>
-          <%= form.text_field :zip_code, class: "form-control", placeholder: "Enter ZIP code" %>
+          <%= form.text_field :zip_code, class: "form-control", placeholder: "Enter ZIP code", required: true %>
         </div>
 
         <div class="text-center">

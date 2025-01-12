@@ -17,38 +17,59 @@
             <h5 class="mb-4">
               <i class="bi bi-person-circle"></i> Guest Information
             </h5>
+
+            <!-- Email Field with Dynamic Lookup -->
+            <div class="input-group mb-3">
+                <%= form.label :email, "Your Email", class: "form-label" %>
+                <div class="input-group">
+                  <%= form.email_field :email, id: "customer-email-field", class: "form-control", placeholder: "Enter your email" %>
+                  <button type="button" id="search-email-button" class="btn btn-primary">
+                    Search
+                  </button>
+                </div>
+                <small class="form-text text-muted">If you already have an account, enter your email to prefill the fields.</small>
+              </div>
+
+
+            <!-- Other Fields -->
             <div class="mb-3">
-              <%= form.label :customer_name, "Your Name", class: "form-label" %>
-              <%= form.text_field :customer_name, class: "form-control", placeholder: "Enter your name" %>
+              <%= form.label :name, "Your Name", class: "form-label" %>
+              <%= form.text_field :name, id: "customer-name-field", class: "form-control", placeholder: "Enter your name" %>
             </div>
             <div class="mb-3">
-              <%= form.label :customer_email, "Your Email", class: "form-label" %>
-              <%= form.email_field :customer_email, class: "form-control", placeholder: "Enter your email" %>
+              <%= form.label :phone, "Your Phone", class: "form-label" %>
+              <%= form.text_field :phone, id: "customer-phone-field", class: "form-control", placeholder: "Enter your phone number" %>
             </div>
             <div class="mb-3">
-              <%= form.label :customer_phone, "Your Phone", class: "form-label" %>
-              <%= form.text_field :customer_phone, class: "form-control", placeholder: "Enter your phone number" %>
+              <%= form.label :address, "Your Address", class: "form-label" %>
+              <%= form.text_area :address, id: "customer-address-field", class: "form-control", placeholder: "Enter your address" %>
             </div>
             <div class="mb-3">
-              <%= form.label :customer_address, "Your Address", class: "form-label" %>
-              <%= form.text_area :customer_address, class: "form-control", placeholder: "Enter your address" %>
+              <%= form.label :country, "Your Country", class: "form-label" %>
+              <%= form.text_field :country, id: "customer-country-field", class: "form-control", placeholder: "Enter your country" %>
             </div>
             <div class="mb-3">
-              <%= form.label :customer_country, "Your Country", class: "form-label" %>
-              <%= form.text_field :customer_country, class: "form-control", placeholder: "Enter your country" %>
+              <%= form.label :city, "City", class: "form-label" %>
+              <%= form.text_field :city, id: "customer-city-field", class: "form-control", placeholder: "Enter your city" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label :zip_code, "Zip Code", class: "form-label" %>
+              <%= form.text_field :zip_code, id: "customer-zip-code-field", class: "form-control", placeholder: "Enter your zip code" %>
             </div>
 
+
             <h5 class="mt-4 mb-4">
-              <i class="bi bi-calendar-event"></i> Booking Dates
+              <i class="bi bi-calendar-event"></i> Booking Details
             </h5>
             <div class="row">
-              <div class="col-md-6 mb-3">
-                <%= form.label :start_date, "Start Date", class: "form-label" %>
-                <%= form.date_field :start_date, value: @booking.start_date, class: "form-control" %>
+              <div class="col-md-4 mb-3">
+                <p><strong>Arrival Date:</strong> <%= @booking.start_date.present? ? @booking.start_date.strftime('%Y-%m-%d') : "Not specified" %></p>
               </div>
-              <div class="col-md-6 mb-3">
-                <%= form.label :end_date, "End Date", class: "form-label" %>
-                <%= form.date_field :end_date, value: @booking.end_date, class: "form-control" %>
+              <div class="col-md-4 mb-3">
+                <p><strong>Departure Date:</strong> <%= @booking.end_date.present? ? @booking.end_date.strftime('%Y-%m-%d') : "Not specified" %></p>
+              </div>
+              <div class="col-md-4 mb-3">
+                <p><strong>Number of Guests:</strong> <%= @booking.guest_count || "Not specified" %></p>
               </div>
             </div>
 
@@ -57,8 +78,12 @@
             </h5>
             <div class="mb-3">
               <%= form.label :payment_method_id, "Payment Method", class: "form-label" %>
-              <%= form.collection_select :payment_method_id, PaymentMethod.all, :id, :name, {}, class: "form-control" %>
+              <%= form.collection_select :payment_method_id, PaymentMethod.all, :id, :name, { prompt: "Select a Payment Method" }, class: "form-control" %>
             </div>
+            <!-- Hidden fields to pass dates and guest count -->
+            <%= form.hidden_field :start_date, value: @booking.start_date %>
+            <%= form.hidden_field :end_date, value: @booking.end_date %>
+            <%= form.hidden_field :guest_count, value: @booking.guest_count %>
 
             <div class="text-center mt-4">
               <%= form.submit "Reserve Now", class: "btn btn-primary btn-lg w-100" %>
@@ -70,15 +95,13 @@
 
     <!-- Price Breakdown (30%) -->
     <div class="col-lg-5">
-      <% if @total_price.present? %>
-        <div class="card shadow mb-4">
-          <div class="card-header bg-info text-white">
-            <h4 class="mb-0">
-              <i class="bi bi-receipt-cutoff"></i> Price Breakdown
-            </h4>
-          </div>
-          <div class="card-body">
-            <table class="table table-striped">
+      <div class="card shadow">
+        <div class="card-header bg-info text-white">
+          <h4>Price Breakdown</h4>
+        </div>
+        <div class="card-body">
+          <% if @price_breakdown.present? %>
+            <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>Date</th>
@@ -93,25 +116,101 @@
                   </tr>
                 <% end %>
               </tbody>
+              <tfoot>
+                <% if @discount.present? && @discount > 0 %>
+                  <tr>
+                    <td><strong>Discount Applied:</strong></td>
+                    <td><%= number_to_currency(@discount) %> (<%= @discount_type %>)</td>
+                  </tr>
+                <% end %>
+                <tr>
+                  <td><strong>Total Before Discount:</strong></td>
+                  <td><%= number_to_currency(@total_before_discount) %></td>
+                </tr>
+                <tr>
+                  <td><strong>Total Price:</strong></td>
+                  <td class="text-success"><%= number_to_currency(@total_price) %></td>
+                </tr>
+              </tfoot>
             </table>
-            <hr>
-
-            <% if @discount.present? && @discount > 0 %>
-              <p class="fs-5 mt-3">
-                <strong>Discount Applied:</strong> <span class="text-danger"><%= number_to_currency(@discount) %> (<%= @discount_type %>)</span>
-              </p>
-              <p class="fs-5 mt-3">
-                <strong>Total Before Discount:</strong> <%= number_to_currency(@total_before_discount) %>
-              </p>
-              <hr>
-            <% end %>
-
-            <p class="fs-5 mt-3">
-              <strong>Total Price:</strong> <span class="text-success"><%= number_to_currency(@total_price) %></span>
-            </p>
-          </div>
+          <% else %>
+                  <div id="price-breakdown-data">
+            <p class="text-muted">No price breakdown available.</p>
+                  </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const emailField = document.getElementById("customer-email-field");
+  const searchButton = document.getElementById("search-email-button");
+
+  const fieldsToDisable = [
+    "customer-name-field",
+    "customer-phone-field",
+    "customer-address-field",
+    "customer-country-field",
+    "customer-city-field",
+    "customer-zip-code-field",
+  ];
+
+  const disableFields = (disable) => {
+    fieldsToDisable.forEach((fieldId) => {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        field.disabled = disable;
+      }
+    });
+  };
+
+  const lookupCustomer = () => {
+    const email = emailField.value.trim();
+    if (email) {
+      fetch(`/customers/lookup?email=${encodeURIComponent(email)}`, {
+        headers: { Accept: "application/json" },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Customer not found");
+          }
+        })
+        .then((data) => {
+          document.getElementById("customer-name-field").value = data.customer.name || "";
+          document.getElementById("customer-phone-field").value = data.customer.phone || "";
+          document.getElementById("customer-address-field").value = data.customer.address || "";
+          document.getElementById("customer-country-field").value = data.customer.country || "";
+          document.getElementById("customer-city-field").value = data.customer.city || "";
+          document.getElementById("customer-zip-code-field").value = data.customer.zip_code || "";
+
+          disableFields(true);
+        })
+        .catch((error) => {
+          console.error(error.message);
+          fieldsToDisable.forEach((fieldId) => {
+            document.getElementById(fieldId).value = "";
+          });
+          disableFields(false);
+        });
+    }
+  };
+
+  searchButton.addEventListener("click", lookupCustomer);
+
+  emailField.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      lookupCustomer();
+    }
+  });
+});
+
+
+</script>

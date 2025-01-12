@@ -1,0 +1,95 @@
+<div class="container mt-5">
+  <h1>Create Booking</h1>
+
+  <div class="row">
+    <!-- Booking Form -->
+    <div class="col-lg-8">
+      <%= form_with model: [:admin_panel, @booking], local: true do |f| %>
+        <div class="mb-3">
+          <%= f.label :property_id, "Property", class: "form-label" %>
+          <%= f.text_field :property_id, value: @property.name, class: "form-control", readonly: true %>
+          <%= f.hidden_field :property_id, value: @property.id %>
+        </div>
+
+        <div class="mb-3">
+            <%= f.label :customer_id, "Customer", class: "form-label" %>
+            <%= f.collection_select :customer_id, Customer.all, :id, :name, { prompt: "Select a Customer" }, class: "form-control", required: true %>
+          </div>
+
+
+        <div class="mb-3">
+          <%= f.label :start_date, "Start Date", class: "form-label" %>
+          <%= f.date_field :start_date, value: @booking.start_date, class: "form-control", readonly: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :end_date, "End Date", class: "form-label" %>
+          <%= f.date_field :end_date, value: @booking.end_date, class: "form-control", readonly: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :guest_count, "Guest Count", class: "form-label" %>
+          <%= f.number_field :guest_count, value: @booking.guest_count, class: "form-control", readonly: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :payment_method_id, "Payment Method", class: "form-label" %>
+          <%= f.collection_select :payment_method_id, PaymentMethod.all, :id, :name, { prompt: "Select a Payment Method" }, class: "form-control", required: true %>
+        </div>
+
+        <%= f.submit "Create Booking", class: "btn btn-success" %>
+      <% end %>
+    </div>
+
+    <!-- Price Breakdown -->
+    <div class="col-lg-4">
+      <% if @price_breakdown.present? %>
+        <div class="card shadow">
+          <div class="card-header bg-info text-white">
+            <h4>Price Breakdown</h4>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @price_breakdown.each do |entry| %>
+                  <tr>
+                    <td><%= entry[:date].strftime('%Y-%m-%d') %></td>
+                    <td><%= number_to_currency(entry[:price]) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+              <tfoot>
+                <% if @discount.present? && @discount > 0 %>
+                  <tr>
+                    <td><strong>Discount Applied:</strong></td>
+                    <td><%= number_to_currency(@discount) %> (<%= @discount_type %>)</td>
+                  </tr>
+                <% end %>
+                <tr>
+                  <td><strong>Total Before Discount:</strong></td>
+                  <td><%= number_to_currency(@total_before_discount) %></td>
+                </tr>
+                <tr>
+                  <td><strong>Total Price:</strong></td>
+                  <td class="text-success"><%= number_to_currency(@total_price) %></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      <% else %>
+        <div class="card shadow">
+          <div class="card-body">
+            <p class="text-muted">No price breakdown available.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

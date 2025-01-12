@@ -2,4 +2,5 @@
 pin "preact" # @10.12.1
 pin "preact/compat", to: "preact--compat.js" # @10.12.1
 pin "preact/hooks", to: "preact--hooks.js" # @10.12.1
+pin "@rails/ujs", to: "rails-ujs.js"
 pin "application"

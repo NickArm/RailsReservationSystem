@@ -1,51 +1,91 @@
-<%= form_with model: [:admin_panel, @property],  local: true, class: "needs-validation" do |f| %>
-  <div class="mb-3">
-    <%= f.label :name, class: "form-label" %>
-    <%= f.text_field :name, class: "form-control" %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :phone, class: "form-label" %>
-    <%= f.text_field :phone, class: "form-control" %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :address, class: "form-label" %>
-    <%= f.text_field :address, class: "form-control" %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :description, class: "form-label" %>
-    <%= f.text_area :description, class: "form-control" %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :country, class: "form-label" %>
-    <%= f.text_field :country, class: "form-control" %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :contact_email, class: "form-label" %>
-    <%= f.email_field :contact_email, class: "form-control" %>
-  </div>
-  <div class="mb-3">
-    <%= f.label :max_guests, class: "form-label" %>
-    <%= f.number_field :max_guests, class: "form-control" %>
-  </div>
-  <div class="form-group">
-  <%= f.label :min_days_stay, "Minimum Days of Stay" %>
-  <%= f.number_field :min_days_stay, class: "form-control", min: 1 %>
-</div>
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Property Details</h4>
+    </div>
+    <div class="card-body">
+      <%= form_with model: [:admin_panel, @property], local: true, class: "needs-validation" do |f| %>
+        <div class="row">
+          <!-- Name -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :name, "Property Name", class: "form-label fw-bold" %>
+            <%= f.text_field :name, class: "form-control", placeholder: "Enter property name" %>
+          </div>
 
-<div class="form-group">
-  <%= f.label :max_days_stay, "Maximum Days of Stay" %>
-  <%= f.number_field :max_days_stay, class: "form-control", min: 1 %>
-</div>
+          <!-- Phone -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :phone, "Contact Phone", class: "form-label fw-bold" %>
+            <%= f.text_field :phone, class: "form-control", placeholder: "Enter contact phone" %>
+          </div>
+        </div>
 
-<div class="form-group">
-  <%= f.label :weekly_discount, "Weekly Discount (%)" %>
-  <%= f.number_field :weekly_discount, class: "form-control", step: 0.01, min: 0, max: 100 %>
-</div>
+        <div class="row">
+          <!-- Address -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :address, "Address", class: "form-label fw-bold" %>
+            <%= f.text_field :address, class: "form-control", placeholder: "Enter address" %>
+          </div>
 
-<div class="form-group">
-  <%= f.label :monthly_discount, "Monthly Discount (%)" %>
-  <%= f.number_field :monthly_discount, class: "form-control", step: 0.01, min: 0, max: 100 %>
-</div>
+          <!-- Country -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :country, "Country", class: "form-label fw-bold" %>
+            <%= f.text_field :country, class: "form-control", placeholder: "Enter country" %>
+          </div>
+        </div>
 
-  <%= f.submit "Create Property", class: "btn btn-primary" %>
-<% end %>
+        <!-- Description -->
+        <div class="mb-3">
+          <%= f.label :description, "Description", class: "form-label fw-bold" %>
+          <%= f.text_area :description, class: "form-control", placeholder: "Enter description", rows: 3 %>
+        </div>
+
+        <div class="row">
+          <!-- Contact Email -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :contact_email, "Contact Email", class: "form-label fw-bold" %>
+            <%= f.email_field :contact_email, class: "form-control", placeholder: "Enter email address" %>
+          </div>
+
+          <!-- Max Guests -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :max_guests, "Maximum Guests", class: "form-label fw-bold" %>
+            <%= f.number_field :max_guests, class: "form-control", placeholder: "Enter max guests", min: 1 %>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Minimum Days of Stay -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :min_days_stay, "Minimum Days of Stay", class: "form-label fw-bold" %>
+            <%= f.number_field :min_days_stay, class: "form-control", min: 1, placeholder: "Enter min days of stay" %>
+          </div>
+
+          <!-- Maximum Days of Stay -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :max_days_stay, "Maximum Days of Stay", class: "form-label fw-bold" %>
+            <%= f.number_field :max_days_stay, class: "form-control", min: 1, placeholder: "Enter max days of stay" %>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Weekly Discount -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :weekly_discount, "Weekly Discount (%)", class: "form-label fw-bold" %>
+            <%= f.number_field :weekly_discount, class: "form-control", step: 0.01, min: 0, max: 100, placeholder: "Enter weekly discount" %>
+          </div>
+
+          <!-- Monthly Discount -->
+          <div class="col-md-6 mb-3">
+            <%= f.label :monthly_discount, "Monthly Discount (%)", class: "form-label fw-bold" %>
+            <%= f.number_field :monthly_discount, class: "form-control", step: 0.01, min: 0, max: 100, placeholder: "Enter monthly discount" %>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+          <%= f.submit "Submit Changes", class: "btn btn-primary btn-lg w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

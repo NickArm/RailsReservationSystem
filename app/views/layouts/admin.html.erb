@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+    <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
     <%= yield :head %>
+
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -33,10 +35,17 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Main Content -->
         <section class="content">
-          <div class="container-fluid">
+        <% flash.each do |key, message| %>
+          <div class="alert alert-<%= bootstrap_class_for_flash(key) %> alert-dismissible fade show" role="alert">
+            <%= message %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% end %>
+
+        <div class="container-fluid">
             <%= yield %>
           </div>
         </section>

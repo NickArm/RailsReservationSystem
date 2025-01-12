@@ -28,4 +28,50 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  bookings:
+    new:
+      invalid_dates: "Invalid dates selected. Please choose valid start and end dates."
+    create:
+      success: "Booking was successfully created."
+    discount_type:
+      monthly: "Monthly Discount"
+      weekly: "Weekly Discount"
+      none: "No Discount"
+    no_discount: "No Discount"
+  search:
+    errors:
+      no_properties_available: "No houses are available for the selected dates or the stay duration doesn't meet the property's requirements."
+      missing_dates: "Please provide both start and end dates."
+    notices:
+      multiple_properties_available: "Multiple houses are available. Please select one."
+      search_completed: "Search completed successfully."
+  admin_panel:
+    bookings:
+      customer_found: "Customer details prefilled."
+      customer_not_found: "No customer found with the given email."
+      invalid_dates: "The provided dates are invalid."
+      alerts:
+        select_customer: "Please select a customer for the booking."
+        select_payment_method: "Please select a payment method for the booking."
+        created_successfully: "Booking created successfully."
+        updated_successfully: "Booking successfully updated."
+        deleted_successfully: "Booking successfully deleted."
+        delete_failed: "Failed to delete booking."
+        delete_restricted: "Booking cannot be deleted unless it is canceled."
+    customers:
+      created_successfully: "Customer successfully created."
+      creation_failed: "There was an error creating the customer. Please try again."
+      updated_successfully: "Customer successfully updated."
+      update_failed: "There was an error updating the customer. Please try again."
+      deleted_successfully: "Customer successfully deleted."
+      deletion_failed: "Failed to delete the customer. Please try again."
+    properties:
+      create:
+        success: "Property was successfully created."
+        error: "There was an error creating the property. Please check the form."
+      update:
+        success: "Property updated successfully."
+        error: "There was an error updating the property. Please check the form."
+      destroy:
+        success: "Property deleted successfully."
+        error: "There was an error deleting the property."
