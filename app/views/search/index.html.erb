@@ -1,18 +1,48 @@
 <div class="container mt-5">
-  <h1>Search for Properties</h1>
-  <%= form_with url: search_path, method: :get, local: true do |form| %>
-    <div class="mb-3">
-      <%= form.label :start_date, "Start Date", class: "form-label" %>
-      <%= form.date_field :start_date, class: "form-control", placeholder: "YYYY-MM-DD" %>
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h2 class="text-center mb-0"><i class="bi bi-search"></i> Search for you stay</h2>
     </div>
-    <div class="mb-3">
-      <%= form.label :end_date, "End Date", class: "form-label" %>
-      <%= form.date_field :end_date, class: "form-control", placeholder: "YYYY-MM-DD" %>
+    <div class="card-body">
+      <%= form_with url: search_path, method: :get, local: true do |form| %>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <%= form.label :start_date, "Arrival Date", class: "form-label" %>
+            <%= form.date_field :start_date, id: "start-date", class: "form-control", placeholder: "YYYY-MM-DD", required: true, min: Date.today %>
+            <div class="form-text text-muted">Select your check-in date.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <%= form.label :end_date, "End Date", class: "form-label" %>
+            <%= form.date_field :end_date, id: "end-date", class: "form-control", placeholder: "YYYY-MM-DD", required: true %>
+            <div class="form-text text-muted">Select your check-out date.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <%= form.label :guest_count, "Departure of Guests", class: "form-label" %>
+            <%= form.number_field :guest_count, class: "form-control", min: 1, max: Property.maximum(:max_guests), required: true %>
+            <div class="form-text text-muted">Enter the number of guests.</div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <%= form.submit "Search Properties", class: "btn btn-primary btn-lg w-100" %>
+        </div>
+      <% end %>
     </div>
-    <div class="mb-3">
-      <%= form.label :guest_count, "Number of Guests", class: "form-label" %>
-      <%= form.number_field :guest_count, class: "form-control", min: 1, max: Property.maximum(:max_guests) %>
-    </div>
-    <%= form.submit "Search", class: "btn btn-primary" %>
-  <% end %>
+  </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const startDateField = document.getElementById("start-date");
+    const endDateField = document.getElementById("end-date");
+
+    // Disable selecting dates before today for the start date
+    const today = new Date().toISOString().split("T")[0];
+    startDateField.setAttribute("min", today);
+
+    // Update the "min" attribute of the end date when the start date changes
+    startDateField.addEventListener("change", () => {
+      const startDateValue = startDateField.value;
+      endDateField.setAttribute("min", startDateValue);
+    });
+  });
+</script>

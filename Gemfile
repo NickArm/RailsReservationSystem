@@ -55,6 +55,8 @@ group :development, :test do
   gem 'devise'
   gem 'rubocop-rails-omakase', require: false
   gem 'toastr-rails'
+  gem 'rubyzip'
+
 end
 
 group :development do

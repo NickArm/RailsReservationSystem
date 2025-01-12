@@ -33,7 +33,7 @@ class SearchController < ApplicationController
     case @properties.size
     when 0
       flash.now[:alert] = t('search.errors.no_properties_available')
-      render :index
+      redirect_to search_path
     when 1
       redirect_to_property_booking(@properties.first)
     else

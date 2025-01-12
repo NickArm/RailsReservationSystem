@@ -1,23 +1,59 @@
 <div class="container mt-5">
-  <h1>Reservation Successful</h1>
-  <p>Thank you for your reservation!</p>
+  <div class="text-center">
+    <h1 class="text-success"><i class="bi bi-check-circle-fill"></i> Reservation Successful</h1>
+    <p class="lead">Thank you for your reservation!</p>
+  </div>
 
-  <h2>Booking Details</h2>
-  <ul>
-    <li><strong>Name:</strong> <%= @booking.customer.name %></li>
-    <li><strong>Email:</strong> <%= @booking.customer.email %></li>
-    <li><strong>Phone:</strong> <%= @booking.customer.phone %></li>
-    <li><strong>Start Date:</strong> <%= @booking.start_date %></li>
-    <li><strong>End Date:</strong> <%= @booking.end_date %></li>
-    <li><strong>Guests:</strong> <%= @booking.guest_count %></li>
-  </ul>
+  <!-- Booking Details Section -->
+  <div class="card shadow mt-4">
+    <div class="card-header bg-primary text-white">
+      <h2><i class="bi bi-card-list"></i> Booking Details</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Name:</strong> <%= @booking.customer.name %></li>
+        <li class="list-group-item"><strong>Email:</strong> <%= @booking.customer.email %></li>
+        <li class="list-group-item"><strong>Phone:</strong> <%= @booking.customer.phone %></li>
+        <li class="list-group-item"><strong>Start Date:</strong> <%= @booking.start_date %></li>
+        <li class="list-group-item"><strong>End Date:</strong> <%= @booking.end_date %></li>
+        <li class="list-group-item"><strong>Guests:</strong> <%= @booking.guest_count %></li>
+      </ul>
+    </div>
+  </div>
 
-  <h2>House Details</h2>
-  <ul>
-    <li><strong>Property Name:</strong> <%= @property.name %></li>
-    <li><strong>Address:</strong> <%= @property.address %></li>
-    <li><strong>Max Guests:</strong> <%= @property.max_guests %></li>
-  </ul>
+  <!-- Property Details Section -->
+  <div class="card shadow mt-4">
+    <div class="card-header bg-info text-white">
+      <h2><i class="bi bi-house-door-fill"></i> House Details</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Property Name:</strong> <%= @property.name %></li>
+        <li class="list-group-item"><strong>Address:</strong> <%= @property.address %></li>
+        <li class="list-group-item"><strong>Max Guests:</strong> <%= @property.max_guests %></li>
+      </ul>
+    </div>
+  </div>
 
-  <%= link_to 'Back to Properties', properties_path, class: 'btn btn-primary' %>
+  <!-- Action Buttons -->
+  <div class="text-center mt-4">
+    <button id="print-button" class="btn btn-secondary btn-lg me-3"><i class="bi bi-printer"></i> Print</button>
+    <button id="save-pdf-button" class="btn btn-danger btn-lg"><i class="bi bi-file-earmark-pdf"></i> Save as PDF</button>
+  </div>
 </div>
+
+<script>
+  // Print Page
+  document.getElementById("print-button").addEventListener("click", () => {
+    window.print();
+  });
+
+  // Save as PDF
+  document.getElementById("save-pdf-button").addEventListener("click", () => {
+    const element = document.body; // Change to a specific container if needed
+    html2pdf().from(element).save('reservation-details.pdf');
+  });
+</script>
+
+<!-- Include html2pdf.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
