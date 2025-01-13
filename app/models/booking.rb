@@ -11,10 +11,14 @@ class Booking < ApplicationRecord
 
   accepts_nested_attributes_for :customer
 
+  # Before Validations
+  before_validation :generate_unique_code, on: :create
+
   # Validations
   validates :start_date, :end_date, presence: true
   validate :validate_stay_length
   validate :validate_dates
+
 
   # Callbacks
   before_destroy :ensure_canceled_status
@@ -34,6 +38,13 @@ class Booking < ApplicationRecord
 
   # Validation Methods
   private
+
+  def generate_unique_code
+    self.unique_code ||= loop do
+      code = SecureRandom.random_number(10**6).to_s.rjust(6, '0')
+      break code unless Booking.exists?(unique_code: code)
+    end
+  end
 
   def validate_stay_length
     return if property.blank? || start_date.blank? || end_date.blank?

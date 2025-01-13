@@ -27,6 +27,7 @@
             <h3 class="card-title">Booking Information</h3>
           </div>
           <div class="card-body">
+            <p><strong>Booking Code:</strong> <%= @booking.unique_code %></p>
             <p><strong>Property:</strong> <%= @booking.property.name %></p>
             <p><strong>Guest Name:</strong> <%= @booking.customer.name %></p>
             <p><strong>Email:</strong> <%= @booking.customer.email %></p>

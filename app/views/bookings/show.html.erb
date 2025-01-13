@@ -11,6 +11,7 @@
     </div>
     <div class="card-body">
       <ul class="list-group">
+        <li class="list-group-item"><strong>Booking Code:</strong> <%= @booking.unique_code %></li>
         <li class="list-group-item"><strong>Name:</strong> <%= @booking.customer.name %></li>
         <li class="list-group-item"><strong>Email:</strong> <%= @booking.customer.email %></li>
         <li class="list-group-item"><strong>Phone:</strong> <%= @booking.customer.phone %></li>

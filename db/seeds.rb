@@ -1,19 +1,91 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-Admin.create(email: "admin@example.com", password: "password")
+require 'faker'
 
-property = Property.create(name: "Villa Paradise", address: "123 Beach St", description: "Luxury villa by the sea",
-max_guests: 8, admin_id: 1)
-Calendar.create(property: property, date: Time.zone.today, status: "open", price: 200.0)
+# Ensure the existence of an admin
+admin = Admin.find_or_create_by!(email: "admin@example.com") do |admin|
+    admin.password = "password"
+  end
 
-PaymentMethod.create(name: "Pay on Arrival", details: "Pay directly to the host upon arrival.")
-PaymentMethod.create(name: "Bank Transfer", details: "Transfer the amount to the provided bank account.")
-ReservationStatus.create([ { name: "Unpaid" }, { name: "Confirm Payment" }, { name: "Paid" } ])
-rails db: seed
+  # Create two properties for the admin
+  property1 = Property.create!(
+    name: "Villa Paradise",
+    address: "123 Beach St",
+    description: "Luxury villa by the sea",
+    max_guests: 8,
+    admin: admin,
+    phone: "123-456-7890",
+    country: "Country 1",
+    contact_email: "villa.paradise@example.com",
+    weekly_discount: 10.0,
+    monthly_discount: 20.0
+  )
+
+  property2 = Property.create!(
+    name: "Mountain Retreat",
+    address: "456 Hilltop Rd",
+    description: "Cozy cabin in the mountains",
+    max_guests: 6,
+    admin: admin,
+    phone: "987-654-3210",
+    country: "Country 2",
+    contact_email: "mountain.retreat@example.com",
+    weekly_discount: 15.0,
+    monthly_discount: 25.0
+  )
+
+  # Create 5 random customers
+  5.times do
+    Customer.create!(
+      name: Faker::Name.name,
+      email: Faker::Internet.email,
+      phone: Faker::PhoneNumber.cell_phone_in_e164,
+      address: Faker::Address.full_address,
+      country: Faker::Address.country,
+      city: Faker::Address.city,
+      zip_code: Faker::Address.zip_code
+    )
+  end
+
+  # Add payment methods
+  PaymentMethod.find_or_create_by!(name: "Pay on Arrival") do |payment|
+    payment.details = "Pay directly to the host upon arrival."
+  end
+
+  PaymentMethod.find_or_create_by!(name: "Bank Transfer") do |payment|
+    payment.details = "Transfer the amount to the provided bank account."
+  end
+
+  # Add reservation statuses
+  ["Unpaid", "Confirm Payment", "Paid"].each do |status|
+    ReservationStatus.find_or_create_by!(name: status)
+  end
+
+  # Open calendar for both houses from 1/1/2025 to 30/6/2025 with price 150/day
+  (1..181).each do |day_offset|
+    date = Date.new(2025, 1, 1) + day_offset - 1
+    [property1, property2].each do |property|
+      Calendar.create!(property: property, date: date, status: "open", price: 150.0)
+    end
+  end
+
+  # Create 2 random bookings for 2 random customers
+  customers = Customer.limit(2) # Select first 2 customers
+
+  customers.each do |customer|
+    2.times do
+      start_date = Date.new(2025, 1, 1) + rand(0..150)
+      end_date = start_date + rand(3..10)
+
+      Booking.create!(
+        property: [property1, property2].sample,
+        start_date: start_date,
+        end_date: end_date,
+        guest_count: rand(1..4),
+        status: rand(0..2),
+        payment_method: PaymentMethod.first,
+        customer: customer,
+        total_price: (end_date - start_date).to_i * 150.0
+      )
+    end
+  end
+
+  puts "Seeding completed successfully!"

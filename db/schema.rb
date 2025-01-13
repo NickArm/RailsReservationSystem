@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_13_103357) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_13_120219) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -34,8 +34,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_103357) do
     t.integer "payment_method_id"
     t.decimal "total_price"
     t.integer "customer_id", null: false
+    t.string "unique_code", null: false
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["property_id"], name: "index_bookings_on_property_id"
+    t.index ["unique_code"], name: "index_bookings_on_unique_code", unique: true
   end
 
   create_table "calendars", force: :cascade do |t|
