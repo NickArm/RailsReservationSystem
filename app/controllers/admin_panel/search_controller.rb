@@ -16,7 +16,7 @@ module AdminPanel
           @properties = result[:properties]
         end
       else
-        flash[:alert] = 'Please provide start and end dates.'
+        flash[:alert] = t('admin_panel.search.errors.missing_dates')
         redirect_to new_admin_panel_search_path
       end
     end

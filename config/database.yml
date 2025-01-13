@@ -31,7 +31,7 @@ production:
 
 
 
-development:
-  <<: *default
-  database: villa_booking_system_development
+# development:
+#   <<: *default
+#   database: villa_booking_system_development
 

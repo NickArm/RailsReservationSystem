@@ -46,6 +46,9 @@ en:
       multiple_properties_available: "Multiple houses are available. Please select one."
       search_completed: "Search completed successfully."
   admin_panel:
+    search:
+        errors:
+          missing_dates: "Please provide start and end dates."
     bookings:
       customer_found: "Customer details prefilled."
       customer_not_found: "No customer found with the given email."

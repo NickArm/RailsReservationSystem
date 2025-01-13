@@ -45,17 +45,17 @@ Metrics/BlockLength:
     - 'spec/**/*' # Ignore block length in specs
     - 'test/**/*'
 
-Metrics/MethodLength:
-  Max: 10 # Max lines per method
+# Metrics/MethodLength:
+#   Max: 10 # Max lines per method
 
-Metrics/ClassLength:
-  Max: 100 # Max lines per class
+# Metrics/ClassLength:
+#   Max: 100 # Max lines per class
 
-Metrics/AbcSize:
-  Max: 15 # Max complexity for a method
+# Metrics/AbcSize:
+#   Max: 15 # Max complexity for a method
 
-Metrics/ModuleLength:
-  Max: 150
+# Metrics/ModuleLength:
+#   Max: 150
 
 Rails:
   Enabled: true # Enable Rails-specific rules
