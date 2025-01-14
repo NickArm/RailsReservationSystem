@@ -19,7 +19,6 @@ class BookingsController < ApplicationController
       guest_count: params[:guest_count]
     )
 
-  # Lookup customer if email is provided
   if params[:email].present?
     customer = Customer.find_by(email: params[:email])
     if customer
@@ -56,7 +55,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  def create
+  def create # Think that i should refix it
     # Separate customer-related attributes
     customer_attributes = booking_params.slice(
       :name, :email, :phone, :address, :country, :zip_code, :city

@@ -1,7 +1,7 @@
 class CalendarsController < ApplicationController
   before_action :set_property
   layout 'admin'
-  # Fetch all calendar events for the property
+
   def index
     if request.format.html?
       @property = Property.find(params[:property_id])
@@ -20,17 +20,13 @@ class CalendarsController < ApplicationController
     end
   end
 
-  # Create or update calendar events
   def create
     begin
-      # Parse and iterate through the date range
       start_date = Date.parse(params[:start])
       end_date = Date.parse(params[:end])
 
       (start_date..end_date).each do |date|
         calendar = @property.calendars.find_or_initialize_by(date: date)
-
-        # Update the calendar entry or create a new one
         calendar.assign_attributes(price: params[:price], status: params[:status])
 
         unless calendar.save
@@ -46,7 +42,6 @@ status: :unprocessable_entity
     end
   end
 
-  # Delete a calendar event
   def destroy
     calendar = @property.calendars.find(params[:id])
     calendar.destroy

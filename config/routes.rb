@@ -14,6 +14,11 @@ devise_for :admins, controllers: {
   # AdminPanel namespace
   namespace :admin_panel, path: "admin" do
     resources :bookings, only: [ :new, :create, :index, :show, :edit, :update, :destroy ]
+    resources :bookings, only: [] do
+      collection do
+        get :calendar_data
+      end
+    end
     resources :properties
     resources :customers do
       member do

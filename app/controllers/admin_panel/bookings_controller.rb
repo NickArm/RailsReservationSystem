@@ -57,6 +57,21 @@ module AdminPanel
       end
     end
 
+    def calendar_data
+      bookings = Booking.includes(:property, :customer).all
+
+      events = bookings.map do |booking|
+        {
+          title: "#{booking.customer.name} - #{booking.property.name}",
+          start: booking.start_date.to_s,
+          end: (booking.end_date + 1.day).to_s,
+          allDay: true
+        }
+      end
+
+      render json: events
+    end
+
     private
 
     def set_booking

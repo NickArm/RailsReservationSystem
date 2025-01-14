@@ -19,7 +19,6 @@ class Booking < ApplicationRecord
   validate :validate_stay_length
   validate :validate_dates
 
-
   # Callbacks
   before_destroy :ensure_canceled_status
 

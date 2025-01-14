@@ -55,14 +55,14 @@ admin = Admin.find_or_create_by!(email: "admin@example.com") do |admin|
   end
 
   # Add reservation statuses
-  ["Unpaid", "Confirm Payment", "Paid"].each do |status|
+  [ "Unpaid", "Confirm Payment", "Paid" ].each do |status|
     ReservationStatus.find_or_create_by!(name: status)
   end
 
   # Open calendar for both houses from 1/1/2025 to 30/6/2025 with price 150/day
   (1..181).each do |day_offset|
     date = Date.new(2025, 1, 1) + day_offset - 1
-    [property1, property2].each do |property|
+    [ property1, property2 ].each do |property|
       Calendar.create!(property: property, date: date, status: "open", price: 150.0)
     end
   end
@@ -76,7 +76,7 @@ admin = Admin.find_or_create_by!(email: "admin@example.com") do |admin|
       end_date = start_date + rand(3..10)
 
       Booking.create!(
-        property: [property1, property2].sample,
+        property: [ property1, property2 ].sample,
         start_date: start_date,
         end_date: end_date,
         guest_count: rand(1..4),
@@ -88,4 +88,4 @@ admin = Admin.find_or_create_by!(email: "admin@example.com") do |admin|
     end
   end
 
-  puts "Seeding completed successfully!"
+  Rails.logger.debug "Seeding completed successfully!"
