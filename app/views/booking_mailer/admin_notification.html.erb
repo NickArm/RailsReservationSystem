@@ -1,0 +1,10 @@
+<h1>New Booking Received</h1>
+<p>A new booking has been submitted:</p>
+
+<ul>
+  <li>Customer Name: <%= @booking.customer.name %></li>
+  <li>Customer Email: <%= @booking.customer.email %></li>
+  <li>Property: <%= @booking.property.name %></li>
+  <li>Check-in Date: <%= @booking.start_date.strftime('%Y-%m-%d') %></li>
+  <li>Check-out Date: <%= @booking.end_date.strftime('%Y-%m-%d') %></li>
+</ul>

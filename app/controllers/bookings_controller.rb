@@ -66,17 +66,17 @@ class BookingsController < ApplicationController
       :name, :email, :phone, :address, :country, :zip_code, :city
     )
 
-    # Initialize booking and associate with property
     @booking = @property.bookings.new(booking_attributes)
 
-    # Find or create customer
     customer = find_or_initialize_customer(customer_attributes)
 
     if customer.save
-      @booking.customer = customer # Associate customer with booking
+      @booking.customer = customer
       assign_total_price
 
       if @booking.save
+        BookingMailer.admin_notification(@booking).deliver_now
+        BookingMailer.customer_notification(@booking).deliver_now
         redirect_to property_booking_path(@property, @booking), notice: t('.success')
       else
         flash.now[:alert] = @booking.errors.full_messages.to_sentence

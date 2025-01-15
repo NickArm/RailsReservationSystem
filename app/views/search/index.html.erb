@@ -12,12 +12,12 @@
             <div class="form-text text-muted">Select your check-in date.</div>
           </div>
           <div class="col-md-4 mb-3">
-            <%= form.label :end_date, "End Date", class: "form-label" %>
+            <%= form.label :end_date, "Departure Date", class: "form-label" %>
             <%= form.date_field :end_date, id: "end-date", class: "form-control", placeholder: "YYYY-MM-DD", required: true %>
             <div class="form-text text-muted">Select your check-out date.</div>
           </div>
           <div class="col-md-4 mb-3">
-            <%= form.label :guest_count, "Departure of Guests", class: "form-label" %>
+            <%= form.label :guest_count, "Number of Guests", class: "form-label" %>
             <%= form.number_field :guest_count, class: "form-control", min: 1, max: Property.maximum(:max_guests), required: true %>
             <div class="form-text text-muted">Enter the number of guests.</div>
           </div>

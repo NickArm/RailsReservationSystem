@@ -1,0 +1,9 @@
+<h1>Your Booking Confirmation</h1>
+<p>Thank you for your booking. Here are the details:</p>
+
+<ul>
+  <li>Property: <%= @booking.property.name %></li>
+  <li>Check-in Date: <%= @booking.start_date.strftime('%Y-%m-%d') %></li>
+  <li>Check-out Date: <%= @booking.end_date.strftime('%Y-%m-%d') %></li>
+</ul>
+<p>We look forward to hosting you!</p>

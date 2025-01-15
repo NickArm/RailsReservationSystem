@@ -6,7 +6,6 @@ gem 'rails', '~> 8.0.1'
 gem 'propshaft'
 # Use postgresql as the database for Active Record
 # gem "pg", "~> 1.1"
-
 gem 'sqlite3'
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
@@ -42,8 +41,9 @@ gem 'thruster', require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 gem 'devise'
-gem 'rubyzip'
 gem 'jsbundling-rails'
+gem 'mail'
+gem 'rubyzip'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -54,6 +54,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
 
+  gem 'dotenv-rails'
   gem 'rubocop-rails-omakase', require: false
   gem 'toastr-rails'
 end

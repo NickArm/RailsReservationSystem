@@ -29,6 +29,11 @@ module AdminPanel
       @booking = Booking.new(booking_params)
 
       if validate_booking && @booking.save
+
+        # Send email notifications
+        BookingMailer.admin_notification(@booking).deliver_now
+        Rails.logger.debug('Admin notification email sent')
+        # BookingMailer.customer_notification(@booking).deliver_now
         redirect_to admin_panel_booking_path(@booking), notice: t('admin_panel.bookings.created_successfully')
       else
         load_customers_and_price_details
