@@ -1,9 +1,7 @@
-
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-
 
 console.log('admin_calendar.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,7 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,listMonth',
             },
-            events: '/admin_panel/bookings/calendar_data',
+            events: '/admin/bookings/calendar_data',
+            views: {
+                dayGridTwoMonths: {
+                    type: 'dayGrid',
+                    duration: { months: 2 },
+                    buttonText: '2 Months',
+                },
+            },
+            initialView: 'dayGridTwoMonths',
         });
         calendar.render();
         console.log('Calendar rendered');
@@ -27,4 +33,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Calendar element not found');
     }
 });
-
