@@ -2,11 +2,14 @@ class Property < ApplicationRecord
   belongs_to :admin
   has_many :calendars, dependent: :destroy
   has_many :bookings, dependent: :destroy
+  has_many :taxes, dependent: :destroy
 
   validates :min_days_stay, :max_days_stay, numericality: { only_integer: true, greater_than: 0 }
   validates :weekly_discount, :monthly_discount,
 numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
   validate :min_days_less_than_max_days
+
+  accepts_nested_attributes_for :taxes, allow_destroy: true
 
   private
 

@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h2 class="text-center mb-0">My Profile</h2>
+    </div>
+    <div class="card-body">
+      <%= form_with(model: @customer, url: customers_profile_path, local: true, method: :patch) do |form| %>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <%= form.label :name, "Name", class: "form-label" %>
+            <%= form.text_field :name, class: "form-control", required: true %>
+          </div>
+          <div class="col-md-6">
+            <%= form.label :email, "Email", class: "form-label" %>
+            <%= form.email_field :email, class: "form-control", required: true %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <%= form.label :phone, "Phone", class: "form-label" %>
+            <%= form.text_field :phone, class: "form-control", required: true %>
+          </div>
+          <div class="col-md-6">
+            <%= form.label :address, "Address", class: "form-label" %>
+            <%= form.text_field :address, class: "form-control", required: true %>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <%= form.label :country, "Country", class: "form-label" %>
+            <%= form.text_field :country, class: "form-control", required: true %>
+          </div>
+          <div class="col-md-6">
+            <%= form.label :city, "City", class: "form-label" %>
+            <%= form.text_field :city, class: "form-control", required: true %>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :zip_code, "Zip Code", class: "form-label" %>
+          <%= form.text_field :zip_code, class: "form-control", required: true %>
+        </div>
+
+        <div class="text-center mt-4">
+          <%= form.submit "Update Profile", class: "btn btn-primary btn-lg" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -88,8 +88,10 @@ module AdminPanel
     end
 
     def booking_params
-      params.require(:booking).permit(:property_id, :start_date, :end_date, :guest_count, :payment_method_id,
-:customer_id, :status)
+      params.require(:booking).permit(
+        :property_id, :start_date, :end_date, :guest_count, :payment_method_id,
+        :customer_id, :status, :total_price
+      )
     end
 
     def new_booking_params
@@ -97,11 +99,19 @@ module AdminPanel
     end
 
     def calculate_price_details
-      price_data = calculate_price_breakdown(@booking.property, @booking.start_date, @booking.end_date)
-      @price_breakdown = price_data[:breakdown]
-      @total_before_discount = @price_breakdown.sum { |entry| entry[:price] }
-      @total_price = price_data[:total_price]
-      @discount = @total_before_discount - @total_price
+      price_data = calculate_price_breakdown(@booking.property, @booking.start_date, @booking.end_date,
+@booking.guest_count)
+
+      # Assign values with nil checks
+      @price_breakdown = price_data[:breakdown] || []
+      @base_total_price = price_data[:base_total_price] || 0 # Default to 0 if nil
+      @total_before_discount = price_data[:total_before_discount] || 0
+      @total_taxes = price_data[:total_taxes] || 0
+      @tax_details = price_data[:tax_details] || []
+      @total_price = price_data[:total_price] || 0
+
+      # Calculate discount safely
+      @discount = @base_total_price - @total_before_discount
       @discount_type = determine_discount_type
     end
 

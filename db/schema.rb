@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_13_120219) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_17_105509) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -61,7 +61,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_120219) do
     t.datetime "updated_at", null: false
     t.string "city"
     t.string "zip_code"
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.index ["email"], name: "index_customers_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
   end
 
   create_table "payment_methods", force: :cascade do |t|
@@ -95,8 +100,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_120219) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "taxes", force: :cascade do |t|
+    t.string "name"
+    t.decimal "rate", precision: 8, scale: 2
+    t.integer "rate_type", default: 0, null: false
+    t.integer "application_case", default: 0, null: false
+    t.integer "property_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["property_id"], name: "index_taxes_on_property_id"
+  end
+
   add_foreign_key "bookings", "customers"
   add_foreign_key "bookings", "properties"
   add_foreign_key "calendars", "properties"
   add_foreign_key "properties", "admins"
+  add_foreign_key "taxes", "properties"
 end

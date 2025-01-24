@@ -1,0 +1,26 @@
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-warning text-white">
+      <h2 class="text-center mb-0"><i class="bi bi-envelope-fill"></i> Forgot Your Password?</h2>
+    </div>
+    <div class="card-body">
+      <p class="text-center mb-4">Enter your email address, and we'll send you instructions to reset your password.</p>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "needs-validation" }) do |f| %>
+        <%= render "customers/shared/error_messages", resource: resource %>
+
+        <div class="mb-3">
+          <%= f.label :email, class: "form-label" %>
+          <%= f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email", placeholder: "Enter your email" %>
+        </div>
+
+        <div class="d-grid">
+          <%= f.submit "Send Reset Instructions", class: "btn btn-warning btn-lg" %>
+        </div>
+      <% end %>
+
+      <div class="text-center mt-3">
+        <%= render "customers/shared/links" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,13 @@ Rails.application.routes.draw do
     sessions: 'admin/sessions'
   }
 
+  devise_for :customers
+
+  authenticate :customer do
+    get '/customers/profile', to: 'customers#profile', as: :customers_profile
+    patch '/customers/profile', to: 'customers#update'
+  end
+
   # Admin dashboard
   get "admin", to: "admin#dashboard", as: :admin_dashboard
 
@@ -14,7 +21,13 @@ Rails.application.routes.draw do
         get :calendar_data
       end
     end
-    resources :properties
+    resources :properties do
+      member do
+        get :manage_taxes
+        post :create_tax
+        delete :destroy_tax
+      end
+    end
     resources :customers do
       member do
         get :reservations

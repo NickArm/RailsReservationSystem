@@ -5,6 +5,7 @@
     <!-- Booking Form -->
     <div class="col-lg-8">
       <%= form_with model: [:admin_panel, @booking], local: true do |f| %>
+        <!-- Property (Read-only) -->
         <div class="mb-3">
           <%= f.label :property_id, "Property", class: "form-label" %>
           <%= f.text_field :property_id, value: @property.name, class: "form-control", readonly: true %>
@@ -12,24 +13,23 @@
         </div>
 
         <div class="mb-3">
-            <%= f.label :customer_id, "Customer", class: "form-label" %>
-            <%= f.collection_select :customer_id, Customer.all, :id, :name, { prompt: "Select a Customer" }, class: "form-control", required: true %>
-          </div>
-
+          <%= f.label :customer_id, "Customer", class: "form-label" %>
+          <%= f.collection_select :customer_id, Customer.all, :id, :name, { prompt: "Select a Customer" }, class: "form-control", required: true %>
+        </div>
 
         <div class="mb-3">
           <%= f.label :start_date, "Start Date", class: "form-label" %>
-          <%= f.date_field :start_date, value: @booking.start_date, class: "form-control", readonly: true %>
+          <%= f.date_field :start_date, value: @booking.start_date, class: "form-control", required: true %>
         </div>
 
         <div class="mb-3">
           <%= f.label :end_date, "End Date", class: "form-label" %>
-          <%= f.date_field :end_date, value: @booking.end_date, class: "form-control", readonly: true %>
+          <%= f.date_field :end_date, value: @booking.end_date, class: "form-control", required: true %>
         </div>
 
         <div class="mb-3">
           <%= f.label :guest_count, "Guest Count", class: "form-label" %>
-          <%= f.number_field :guest_count, value: @booking.guest_count, class: "form-control", readonly: true %>
+          <%= f.number_field :guest_count, value: @booking.guest_count, class: "form-control", min: 1, required: true %>
         </div>
 
         <div class="mb-3">
@@ -65,6 +65,10 @@
                 <% end %>
               </tbody>
               <tfoot>
+                <tr>
+                  <td><strong>Total Before Discount:</strong></td>
+                  <td><%= number_to_currency(@base_total_price || 0) %></td>
+                </tr>
                 <% if @discount.present? && @discount > 0 %>
                   <tr>
                     <td><strong>Discount Applied:</strong></td>
@@ -72,12 +76,24 @@
                   </tr>
                 <% end %>
                 <tr>
-                  <td><strong>Total Before Discount:</strong></td>
-                  <td><%= number_to_currency(@total_before_discount) %></td>
+                  <td><strong>Total Before Taxes:</strong></td>
+                  <td><%= number_to_currency(@total_before_discount || 0) %></td>
                 </tr>
+                <% if @tax_details.present? %>
+                  <% @tax_details.each do |tax| %>
+                    <tr>
+                      <td><strong><%= tax[:name] %> (<%= tax[:rate_type].capitalize %> - <%= tax[:application_case].humanize %>):</strong></td>
+                      <td><%= number_to_currency(tax[:amount]) %></td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <td><strong>Total Taxes:</strong></td>
+                    <td><%= number_to_currency(@total_taxes || 0) %></td>
+                  </tr>
+                <% end %>
                 <tr>
                   <td><strong>Total Price:</strong></td>
-                  <td class="text-success"><%= number_to_currency(@total_price) %></td>
+                  <td class="text-success"><%= number_to_currency(@total_price || 0) %></td>
                 </tr>
               </tfoot>
             </table>

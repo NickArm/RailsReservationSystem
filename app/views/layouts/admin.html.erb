@@ -13,6 +13,7 @@
     <%= yield :head %>
 
     <%= javascript_include_tag "admin_calendar", type: "module", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", type: "module" %>
 
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">

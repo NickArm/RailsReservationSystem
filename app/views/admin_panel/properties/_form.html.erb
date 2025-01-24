@@ -4,7 +4,7 @@
       <h4 class="mb-0">Property Details</h4>
     </div>
     <div class="card-body">
-      <%= form_with model: [:admin_panel, @property], local: true, class: "needs-validation" do |f| %>
+      <%= form_with model: [:admin_panel, @property], local: true, class: "needs-validation", data: { turbo: false } do |f| %>
         <div class="row">
           <!-- Name -->
           <div class="col-md-6 mb-3">
@@ -53,32 +53,84 @@
           </div>
         </div>
 
-        <div class="row">
-          <!-- Minimum Days of Stay -->
-          <div class="col-md-6 mb-3">
-            <%= f.label :min_days_stay, "Minimum Days of Stay", class: "form-label fw-bold" %>
-            <%= f.number_field :min_days_stay, class: "form-control", min: 1, placeholder: "Enter min days of stay" %>
-          </div>
-
-          <!-- Maximum Days of Stay -->
-          <div class="col-md-6 mb-3">
-            <%= f.label :max_days_stay, "Maximum Days of Stay", class: "form-label fw-bold" %>
-            <%= f.number_field :max_days_stay, class: "form-control", min: 1, placeholder: "Enter max days of stay" %>
-          </div>
+        <!-- Taxes Section -->
+        <div class="mt-4" data-controller="taxes">
+          <h5 class="fw-bold">Taxes</h5>
+          <div data-taxes-target="list">
+          <%= f.fields_for :taxes do |tax_fields| %>
+            <div id="<%= dom_id(tax_fields.object) %>" class="card mb-3 tax-item">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-3 mb-3">
+                    <%= tax_fields.label :name, "Tax Name", class: "form-label fw-bold" %>
+                    <%= tax_fields.text_field :name, class: "form-control", placeholder: "Enter tax name" %>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <%= tax_fields.label :rate_type, "Rate Type", class: "form-label fw-bold" %>
+                    <%= tax_fields.select :rate_type, Tax.rate_types.keys.map { |key| [key.humanize, key] }, {}, class: "form-control" %>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <%= tax_fields.label :rate, "Rate (Value)", class: "form-label fw-bold" %>
+                    <%= tax_fields.number_field :rate, class: "form-control", step: 0.01, placeholder: "Enter tax value" %>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <%= tax_fields.label :application_case, "Application Case", class: "form-label fw-bold" %>
+                    <%= tax_fields.select :application_case, Tax.application_cases.keys.map { |key| [key.humanize, key] }, {}, class: "form-control" %>
+                  </div>
+                </div>
+                <!-- Hidden field for marking tax for deletion -->
+                <%= tax_fields.hidden_field :_destroy, value: false, data: { taxes_target: "destroy" } %>
+                <a href="#" class="btn btn-danger btn-sm" data-action="click->taxes#remove">Remove</a>
+              </div>
+            </div>
+          <% end %>
         </div>
 
-        <div class="row">
-          <!-- Weekly Discount -->
-          <div class="col-md-6 mb-3">
-            <%= f.label :weekly_discount, "Weekly Discount (%)", class: "form-label fw-bold" %>
-            <%= f.number_field :weekly_discount, class: "form-control", step: 0.01, min: 0, max: 100, placeholder: "Enter weekly discount" %>
-          </div>
 
-          <!-- Monthly Discount -->
-          <div class="col-md-6 mb-3">
-            <%= f.label :monthly_discount, "Monthly Discount (%)", class: "form-label fw-bold" %>
-            <%= f.number_field :monthly_discount, class: "form-control", step: 0.01, min: 0, max: 100, placeholder: "Enter monthly discount" %>
+          <!-- Add Tax Button -->
+          <a href="#" class="btn btn-primary btn-sm" data-action="taxes#add">Add Tax</a>
+
+          <!-- Template -->
+          <template data-taxes-target="template">
+          <div class="card mb-3 tax-item">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3 mb-3">
+                  <label class="form-label fw-bold">Tax Name</label>
+                  <input type="text" name="property[taxes_attributes][TEMPLATE_INDEX][name]" class="form-control" placeholder="Enter tax name">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label class="form-label fw-bold">Rate Type</label>
+                  <select name="property[taxes_attributes][TEMPLATE_INDEX][rate_type]" class="form-control">
+                    <% Tax.rate_types.each_key do |key| %>
+                      <option value="<%= key %>"><%= key.humanize %></option>
+                    <% end %>
+                  </select>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label class="form-label fw-bold">Rate (Value)</label>
+                  <input type="number" name="property[taxes_attributes][TEMPLATE_INDEX][rate]" class="form-control" step="0.01" placeholder="Enter tax value">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label class="form-label fw-bold">Application Case</label>
+                  <select name="property[taxes_attributes][TEMPLATE_INDEX][application_case]" class="form-control">
+                    <% Tax.application_cases.each_key do |key| %>
+                      <option value="<%= key %>"><%= key.humanize %></option>
+                    <% end %>
+                  </select>
+                </div>
+              </div>
+
+              <input type="hidden" name="property[taxes_attributes][TEMPLATE_INDEX][_destroy]" value="false">
+              <a href="#" class="btn btn-danger btn-sm" data-action="click->taxes#remove">Remove</a>
+            </div>
           </div>
+        </template>
+
+
         </div>
 
         <!-- Submit Button -->

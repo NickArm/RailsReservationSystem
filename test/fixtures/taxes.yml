@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  rate: 9.99
+  rate_type: 1
+  application_case: 1
+  property: one
+
+two:
+  name: MyString
+  rate: 9.99
+  rate_type: 1
+  application_case: 1
+  property: two

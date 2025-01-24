@@ -1,0 +1,10 @@
+<div id="<%= dom_id(tax) %>" class="tax-item">
+  <div class="row">
+    <div class="col-md-3"><%= tax.name %></div>
+    <div class="col-md-3"><%= tax.rate_type %></div>
+    <div class="col-md-3"><%= tax.rate %></div>
+    <div class="col-md-3">
+      <%= link_to "Remove", "#", data: { action: "click->taxes#remove" }, class: "btn btn-danger btn-sm" %>
+    </div>
+  </div>
+</div>

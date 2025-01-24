@@ -18,45 +18,48 @@
               <i class="bi bi-person-circle"></i> Guest Information
             </h5>
 
-            <!-- Email Field with Dynamic Lookup -->
-            <div class="input-group mb-3">
-                <%= form.label :email, "Your Email", class: "form-label" %>
-                <div class="input-group">
-                  <%= form.email_field :email, id: "customer-email-field", class: "form-control", placeholder: "Enter your email" %>
-                  <button type="button" id="search-email-button" class="btn btn-primary">
-                    Search
-                  </button>
-                </div>
-                <small class="form-text text-muted">If you already have an account, enter your email to prefill the fields.</small>
+            <% if customer_signed_in? %>
+              <div class="alert alert-info">
+                <strong>Note:</strong> If you need to change your details, <%= link_to "click here", customers_profile_path, class: "text-primary" %>.
               </div>
+            <% end %>
+
+            <div class="input-group mb-3">
+              <%= form.label :email, "Your Email", class: "form-label" %>
+              <div class="input-group">
+                <%= form.email_field :email, id: "customer-email-field", class: "form-control", placeholder: "Enter your email", value: (customer_signed_in? ? current_customer.email : ""), readonly: customer_signed_in? %>
+                <button type="button" id="search-email-button" class="btn btn-primary" <%= customer_signed_in? ? "disabled" : "" %>>
+                  Search
+                </button>
+              </div>
+              <small class="form-text text-muted">If you already have an account, enter your email to prefill the fields.</small>
+            </div>
 
 
-            <!-- Other Fields -->
             <div class="mb-3">
               <%= form.label :name, "Your Name", class: "form-label" %>
-              <%= form.text_field :name, id: "customer-name-field", class: "form-control", placeholder: "Enter your name" %>
+              <%= form.text_field :name, id: "customer-name-field", class: "form-control", placeholder: "Enter your name", value: (customer_signed_in? ? current_customer.name : ""), readonly: customer_signed_in? %>
             </div>
             <div class="mb-3">
               <%= form.label :phone, "Your Phone", class: "form-label" %>
-              <%= form.text_field :phone, id: "customer-phone-field", class: "form-control", placeholder: "Enter your phone number" %>
+              <%= form.text_field :phone, id: "customer-phone-field", class: "form-control", placeholder: "Enter your phone number", value: (customer_signed_in? ? current_customer.phone : ""), readonly: customer_signed_in? %>
             </div>
             <div class="mb-3">
               <%= form.label :address, "Your Address", class: "form-label" %>
-              <%= form.text_area :address, id: "customer-address-field", class: "form-control", placeholder: "Enter your address" %>
+              <%= form.text_area :address, id: "customer-address-field", class: "form-control", placeholder: "Enter your address", value: (customer_signed_in? ? current_customer.address : ""), readonly: customer_signed_in? %>
             </div>
             <div class="mb-3">
               <%= form.label :country, "Your Country", class: "form-label" %>
-              <%= form.text_field :country, id: "customer-country-field", class: "form-control", placeholder: "Enter your country" %>
+              <%= form.text_field :country, id: "customer-country-field", class: "form-control", placeholder: "Enter your country", value: (customer_signed_in? ? current_customer.country : ""), readonly: customer_signed_in? %>
             </div>
             <div class="mb-3">
               <%= form.label :city, "City", class: "form-label" %>
-              <%= form.text_field :city, id: "customer-city-field", class: "form-control", placeholder: "Enter your city" %>
+              <%= form.text_field :city, id: "customer-city-field", class: "form-control", placeholder: "Enter your city", value: (customer_signed_in? ? current_customer.city : ""), readonly: customer_signed_in? %>
             </div>
             <div class="mb-3">
               <%= form.label :zip_code, "Zip Code", class: "form-label" %>
-              <%= form.text_field :zip_code, id: "customer-zip-code-field", class: "form-control", placeholder: "Enter your zip code" %>
+              <%= form.text_field :zip_code, id: "customer-zip-code-field", class: "form-control", placeholder: "Enter your zip code", value: (customer_signed_in? ? current_customer.zip_code : ""), readonly: customer_signed_in? %>
             </div>
-
 
             <h5 class="mt-4 mb-4">
               <i class="bi bi-calendar-event"></i> Booking Details
@@ -108,41 +111,56 @@
                   <th>Price</th>
                 </tr>
               </thead>
-              <tbody>
-                <% @price_breakdown.each do |entry| %>
-                  <tr>
-                    <td><%= entry[:date].strftime('%Y-%m-%d') %></td>
-                    <td><%= number_to_currency(entry[:price]) %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-              <tfoot>
-                <% if @discount.present? && @discount > 0 %>
-                  <tr>
-                    <td><strong>Discount Applied:</strong></td>
-                    <td><%= number_to_currency(@discount) %> (<%= @discount_type %>)</td>
-                  </tr>
-                <% end %>
+          <tbody>
+            <% @price_breakdown.each do |entry| %>
+              <tr>
+                <td><%= entry[:date].strftime('%Y-%m-%d') %></td>
+                <td><%= number_to_currency(entry[:price]) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <% if @discount.present? && @discount > 0 %>
+              <tr>
+                <td><strong>Discount Applied:</strong></td>
+                <td><%= number_to_currency(@discount) %> (<%= @discount_type %>)</td>
+              </tr>
+            <% end %>
+            <% if @tax_details.present? %>
+              <% @tax_details.each do |tax| %>
                 <tr>
-                  <td><strong>Total Before Discount:</strong></td>
-                  <td><%= number_to_currency(@total_before_discount) %></td>
+                  <td><strong><%= tax[:name] %> (<%= tax[:rate_type].capitalize %> - <%= tax[:application_case].humanize %>):</strong></td>
+                  <td><%= number_to_currency(tax[:amount]) %></td>
                 </tr>
-                <tr>
-                  <td><strong>Total Price:</strong></td>
-                  <td class="text-success"><%= number_to_currency(@total_price) %></td>
-                </tr>
-              </tfoot>
+              <% end %>
+            <% end %>
+            <tr>
+              <td><strong>Total Before Discount:</strong></td>
+              <td><%= number_to_currency(@base_total_price) %></td>
+            </tr>
+            <tr>
+              <td><strong>Total Taxes:</strong></td>
+              <td><%= number_to_currency(@total_taxes) %></td>
+            </tr>
+            <tr>
+              <td><strong>Total Price:</strong></td>
+              <td class="text-success"><%= number_to_currency(@total_price) %></td>
+            </tr>
+          </tfoot>
+
             </table>
           <% else %>
-                  <div id="price-breakdown-data">
-            <p class="text-muted">No price breakdown available.</p>
-                  </div>
+            <div id="price-breakdown-data">
+              <p class="text-muted">No price breakdown available.</p>
+            </div>
           <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
 
 
 

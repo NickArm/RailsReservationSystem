@@ -123,9 +123,11 @@ status: :ok
 
   def set_price_details(price_data, start_date, end_date)
     @price_breakdown = price_data[:breakdown]
-    @total_before_discount = @price_breakdown.sum { |entry| entry[:price] }
+    @base_total_price = price_data[:base_total_price]
+    @total_taxes = price_data[:total_taxes]
+    @tax_details = price_data[:tax_details]
     @total_price = price_data[:total_price]
-    @discount = @total_before_discount - @total_price
+    @discount = @base_total_price - price_data[:total_price] + price_data[:total_taxes]
     @discount_type = calculate_discount_type(start_date, end_date)
   end
 

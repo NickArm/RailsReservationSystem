@@ -1,0 +1,38 @@
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h2 class="text-center mb-0"><i class="bi bi-person-plus-fill"></i> Sign Up</h2>
+    </div>
+    <div class="card-body">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation" }) do |f| %>
+        <%= render "customers/shared/error_messages", resource: resource %>
+
+        <div class="mb-3">
+          <%= f.label :email, class: "form-label" %>
+          <%= f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email", placeholder: "Enter your email" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, class: "form-label" %>
+          <% if @minimum_password_length %>
+            <small class="form-text text-muted">(<%= @minimum_password_length %> characters minimum)</small>
+          <% end %>
+          <%= f.password_field :password, class: "form-control", autocomplete: "new-password", placeholder: "Enter your password" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password_confirmation, "Confirm Password", class: "form-label" %>
+          <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", placeholder: "Confirm your password" %>
+        </div>
+
+        <div class="d-grid">
+          <%= f.submit "Sign up", class: "btn btn-primary btn-lg" %>
+        </div>
+      <% end %>
+
+      <div class="text-center mt-3">
+        <%= render "customers/shared/links" %>
+      </div>
+    </div>
+  </div>
+</div>

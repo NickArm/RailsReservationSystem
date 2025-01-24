@@ -3,12 +3,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 
-console.log('admin_calendar.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded');
     const calendarEl = document.getElementById('calendar');
     if (calendarEl) {
-        console.log('Calendar element found');
         const calendar = new Calendar(calendarEl, {
             plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
             initialView: 'dayGridMonth',
@@ -28,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
             initialView: 'dayGridTwoMonths',
         });
         calendar.render();
-        console.log('Calendar rendered');
     } else {
         console.log('Calendar element not found');
     }
