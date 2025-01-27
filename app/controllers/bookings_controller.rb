@@ -67,6 +67,7 @@ class BookingsController < ApplicationController
     )
 
     @booking = @property.bookings.new(booking_attributes)
+    @booking.status = 'unpaid'
 
     customer = find_or_initialize_customer(customer_attributes)
 
@@ -74,10 +75,23 @@ class BookingsController < ApplicationController
       @booking.customer = customer
       assign_total_price
 
+      # if @booking.save
+      #   BookingMailer.admin_notification(@booking).deliver_now
+      #   BookingMailer.customer_notification(@booking).deliver_now
+      #   redirect_to property_booking_path(@property, @booking), notice: t('.success')
+      # else
+      #   flash.now[:alert] = @booking.errors.full_messages.to_sentence
+      #   render :new
+      # end
       if @booking.save
-        BookingMailer.admin_notification(@booking).deliver_now
-        BookingMailer.customer_notification(@booking).deliver_now
-        redirect_to property_booking_path(@property, @booking), notice: t('.success')
+        if @booking.payment_method&.name == "Stripe"
+          # Redirect to Stripe payment
+          redirect_to create_payment_intent_path(booking_id: @booking.id)        else
+          # Process offline payment
+          BookingMailer.admin_notification(@booking).deliver_now
+          BookingMailer.customer_notification(@booking).deliver_now
+          redirect_to property_booking_path(@property, @booking), notice: t('.success')
+        end
       else
         flash.now[:alert] = @booking.errors.full_messages.to_sentence
         render :new

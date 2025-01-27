@@ -1,4 +1,5 @@
 class Booking < ApplicationRecord
+
   # Associations
   belongs_to :customer
   belongs_to :property
@@ -18,6 +19,7 @@ class Booking < ApplicationRecord
   validates :start_date, :end_date, presence: true
   validate :validate_stay_length
   validate :validate_dates
+  validates :status, presence: true
 
   # Callbacks
   before_destroy :ensure_canceled_status

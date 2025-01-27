@@ -53,4 +53,17 @@ Rails.application.routes.draw do
     resources :calendars, only: [:index, :create, :destroy]
     resources :bookings, only: [:index, :new, :create, :show]
   end
+
+  # Payments
+  get 'create_payment_intent', to: 'payments#create_payment_intent', as: :create_payment_intent
+
+  resources :payments, only: [] do
+    post :create_payment_intent, on: :collection
+  end
+
+  # Success and cancel routes after payment
+  get 'payment_success', to: 'payments#success'
+  get 'payment_cancel', to: 'payments#cancel'
+
+
 end

@@ -81,16 +81,18 @@
             </h5>
             <div class="mb-3">
               <%= form.label :payment_method_id, "Payment Method", class: "form-label" %>
-              <%= form.collection_select :payment_method_id, PaymentMethod.all, :id, :name, { prompt: "Select a Payment Method" }, class: "form-control" %>
+              <%= form.collection_select :payment_method_id, PaymentMethod.all, :id, :name, { prompt: "Select a Payment Method" }, class: "form-control", required: true, id: "payment-method-select" %>
             </div>
             <!-- Hidden fields to pass dates and guest count -->
             <%= form.hidden_field :start_date, value: @booking.start_date %>
             <%= form.hidden_field :end_date, value: @booking.end_date %>
             <%= form.hidden_field :guest_count, value: @booking.guest_count %>
 
+            <!-- Buttons -->
             <div class="text-center mt-4">
-              <%= form.submit "Reserve Now", class: "btn btn-primary btn-lg w-100" %>
-            </div>
+            <%= form.submit "Reserve Now", class: "btn btn-primary btn-lg w-100", id: "default-submit-button" %>
+            <button id="stripe-button" class="btn btn-primary btn-lg w-100 d-none">Pay with Stripe</button>
+          </div>
           <% end %>
         </div>
       </div>
@@ -231,4 +233,73 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const paymentMethodSelect = document.getElementById("payment-method-select");
+  const stripeButton = document.getElementById("stripe-button");
+  const defaultSubmitButton = document.getElementById("default-submit-button");
+
+  if (paymentMethodSelect) {
+    paymentMethodSelect.addEventListener("change", () => {
+      if (paymentMethodSelect.options[paymentMethodSelect.selectedIndex].text === "Stripe") {
+        stripeButton.classList.remove("d-none");
+        defaultSubmitButton.classList.add("d-none");
+      } else {
+        stripeButton.classList.add("d-none");
+        defaultSubmitButton.classList.remove("d-none");
+      }
+    });
+  }
+
+  if (stripeButton) {
+    stripeButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      try {
+        const response = await fetch("<%= create_payment_intent_path %>", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": "<%= form_authenticity_token %>",
+          },
+          body: JSON.stringify({
+            booking_id: <%= @booking.id %>,
+            total_price: <%= @total_price %>,
+          }),
+        });
+
+        if (!response.ok) throw new Error("Payment initiation failed.");
+        const { sessionId } = await response.json();
+        const stripe = Stripe("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
+        await stripe.redirectToCheckout({ sessionId });
+      } catch (error) {
+        alert(error.message);
+        console.error(error);
+      }
+    });
+  }
+});
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const stripe = Stripe("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
+
+  fetch("<%= create_payment_intent_path(@booking) %>", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": "<%= form_authenticity_token %>",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return stripe.redirectToCheckout({ sessionId: data.sessionId });
+    })
+    .catch((error) => {
+      console.error("Stripe Error:", error);
+      alert("Payment initiation failed. Please try again.");
+    });
+});
 </script>
