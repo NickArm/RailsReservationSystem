@@ -1,5 +1,4 @@
 class Booking < ApplicationRecord
-
   # Associations
   belongs_to :customer
   belongs_to :property

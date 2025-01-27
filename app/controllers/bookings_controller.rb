@@ -84,7 +84,7 @@ class BookingsController < ApplicationController
       #   render :new
       # end
       if @booking.save
-        if @booking.payment_method&.name == "Stripe"
+        if @booking.payment_method&.name == 'Stripe'
           # Redirect to Stripe payment
           redirect_to create_payment_intent_path(booking_id: @booking.id)        else
           # Process offline payment

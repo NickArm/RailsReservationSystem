@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 
 class StripeWebhooksControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do

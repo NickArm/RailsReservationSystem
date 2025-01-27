@@ -11,10 +11,10 @@ class StripeWebhooksController < ApplicationController
         event = Stripe::Webhook.construct_event(
           payload, sig_header, ENV['STRIPE_ENDPOINT_SECRET']
         )
-      rescue JSON::ParserError => e
+      rescue JSON::ParserError
         render json: { error: 'Invalid payload' }, status: :bad_request
         return
-      rescue Stripe::SignatureVerificationError => e
+      rescue Stripe::SignatureVerificationError
         render json: { error: 'Invalid signature' }, status: :bad_request
         return
       end
@@ -25,7 +25,6 @@ class StripeWebhooksController < ApplicationController
       when 'payment_intent.payment_failed'
         handle_payment_intent(event['data']['object'], 'payment_failed')
       end
-
 
       render json: { message: 'Event received' }, status: :ok
     end
@@ -43,5 +42,4 @@ class StripeWebhooksController < ApplicationController
           Rails.logger.error "Booking with ID #{booking_id} not found for #{status} payment"
         end
       end
-
-  end
+end

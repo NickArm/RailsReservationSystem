@@ -66,4 +66,19 @@ Rails.application.routes.draw do
   get 'payment_cancel', to: 'payments#cancel'
 
 
+  # API
+    namespace :api do
+      namespace :v1 do
+        get 'search', to: 'search#index'
+        resources :properties, only: [:index]
+        resources :bookings, only: [:index]
+        resources :customers, only: [:index] do
+          collection do
+            get 'search_by_email'
+          end
+        end
+      end
+    end
+
+
 end
