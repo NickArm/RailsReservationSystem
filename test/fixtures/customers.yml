@@ -1,15 +1,23 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+customer_one:
+  name: John Doe
+  email: john.doe@example.com
+  phone: 555-111-2222
+  address: 101 Main St, Springfield
+  country: USA
+  city: Springfield
+  zip_code: 12345
+  encrypted_password: <%= Devise::Encryptor.digest(Customer, 'password123') %>
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
 
-one:
-  name: MyString
-  email: MyString
-  phone: MyString
-  address: MyText
-  country: MyString
-
-two:
-  name: MyString
-  email: MyString
-  phone: MyString
-  address: MyText
-  country: MyString
+customer_two:
+  name: Jane Smith
+  email: jane.smith@example.com
+  phone: 555-333-4444
+  address: 202 Elm St, Shelbyville
+  country: USA
+  city: Shelbyville
+  zip_code: 67890
+  encrypted_password: <%= Devise::Encryptor.digest(Customer, 'password123') %>
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>

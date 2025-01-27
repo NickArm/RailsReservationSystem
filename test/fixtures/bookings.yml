@@ -1,23 +1,29 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  email: MyString
-  phone: MyString
-  address: MyText
-  property: one
-  start_date: 2025-01-05
-  end_date: 2025-01-05
-  guest_count: 1
-  status: MyString
+booking_one:
+  property_id: <%= ActiveRecord::FixtureSet.identify(:property_one) %>
+  customer_id: <%= ActiveRecord::FixtureSet.identify(:customer_one) %>
+  start_date: <%= Date.today %>
+  end_date: <%= Date.today + 7.days %>
+  guest_count: 4
+  status: 1
+  payment_method_id: 1
+  total_price: 1200.00
+  unique_code: UNIQUE123
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
 
-two:
-  name: MyString
-  email: MyString
-  phone: MyString
-  address: MyText
-  property: two
-  start_date: 2025-01-05
-  end_date: 2025-01-05
-  guest_count: 1
-  status: MyString
+booking_two:
+  property_id: <%= ActiveRecord::FixtureSet.identify(:property_two) %>
+  customer_id: <%= ActiveRecord::FixtureSet.identify(:customer_two) %>
+  start_date: <%= Date.today + 10.days %>
+  end_date: <%= Date.today + 15.days %>
+  guest_count: 2
+  status: 0
+  payment_method_id: 2
+  total_price: 800.00
+  unique_code: UNIQUE456
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+
+

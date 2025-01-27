@@ -1,15 +1,21 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+property_one:
+  name: Beach House
+  address: 123 Ocean Drive
+  description: A beautiful beachside property
+  max_guests: 8
+  admin: admin_one
+  min_days_stay: 3
+  max_days_stay: 10
+  weekly_discount: 10.0
+  monthly_discount: 15.0
 
-one:
-  name: MyString
-  address: MyString
-  description: MyText
-  max_guests: 1
-  admin: one
-
-two:
-  name: MyString
-  address: MyString
-  description: MyText
-  max_guests: 1
-  admin: two
+property_two:
+  name: Mountain Cabin
+  address: 456 Hilltop Ave
+  description: Cozy cabin in the mountains
+  max_guests: 5
+  admin: admin_two
+  min_days_stay: 2
+  max_days_stay: 7
+  weekly_discount: 5.0
+  monthly_discount: 10.0

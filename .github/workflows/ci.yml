@@ -89,11 +89,6 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Set up database
-        run: |
-          bin/rails db:setup
-          bin/rails db:test:prepare
-
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()

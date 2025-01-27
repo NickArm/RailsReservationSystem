@@ -1,15 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+tax_one:
+  name: VAT
+  rate: 10.00
+  rate_type: 0
+  application_case: 0
+  property_id: <%= ActiveRecord::FixtureSet.identify(:property_one) %>
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
 
-one:
-  name: MyString
-  rate: 9.99
-  rate_type: 1
+tax_two:
+  name: Service Tax
+  rate: 15.00
+  rate_type: 0
   application_case: 1
-  property: one
-
-two:
-  name: MyString
-  rate: 9.99
-  rate_type: 1
-  application_case: 1
-  property: two
+  property_id: <%= ActiveRecord::FixtureSet.identify(:property_two) %>
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>

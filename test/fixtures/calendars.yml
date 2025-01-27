@@ -1,13 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+calendar_one:
+  property: property_one
+  date: 2025-01-01
+  status: "available"
+  price: 100.0
 
-one:
-  property: one
-  date: 2025-01-05
-  status: MyString
-  price: 9.99
-
-two:
-  property: two
-  date: 2025-01-05
-  status: MyString
-  price: 9.99
+calendar_two:
+  property: property_two
+  date: 2025-01-02
+  status: "booked"
+  price: 150.0
