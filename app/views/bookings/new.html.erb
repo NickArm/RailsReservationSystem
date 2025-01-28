@@ -81,14 +81,21 @@
             </h5>
             <div class="mb-3">
               <%= form.label :payment_method_id, "Payment Method", class: "form-label" %>
-              <%= form.collection_select :payment_method_id, PaymentMethod.all, :id, :name, { prompt: "Select a Payment Method" }, class: "form-control", required: true, id: "payment-method-select" %>
+              <%= form.collection_select :payment_method_id,
+                                          current_admin.enabled_payment_methods.includes(:payment_method).map(&:payment_method),
+                                          :id,
+                                          :name,
+                                          { prompt: "Select a Payment Method" },
+                                          { class: "form-control", id: "payment-method-select" } %>
             </div>
+            <div id="payment-method-description" class="text-muted mt-2"></div>
+            <%= form.hidden_field :payment_method_description, value: "", id: "payment-method-description-field" %>
+
             <!-- Hidden fields to pass dates and guest count -->
             <%= form.hidden_field :start_date, value: @booking.start_date %>
             <%= form.hidden_field :end_date, value: @booking.end_date %>
             <%= form.hidden_field :guest_count, value: @booking.guest_count %>
 
-            <!-- Buttons -->
             <div class="text-center mt-4">
             <%= form.submit "Reserve Now", class: "btn btn-primary btn-lg w-100", id: "default-submit-button" %>
             <button id="stripe-button" class="btn btn-primary btn-lg w-100 d-none">Pay with Stripe</button>
@@ -301,5 +308,36 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Stripe Error:", error);
       alert("Payment initiation failed. Please try again.");
     });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const paymentMethodSelect = document.getElementById("payment-method-select");
+  const descriptionDiv = document.getElementById("payment-method-description");
+  const descriptionField = document.getElementById("payment-method-description-field");
+
+  // Object to map payment method IDs to descriptions (this will be embedded dynamically)
+  const paymentMethodDescriptions = {
+    <% PaymentMethod.all.each do |method| %>
+      "<%= method.id %>": "<%= j method.description %>",
+    <% end %>
+  };
+
+  paymentMethodSelect.addEventListener("change", () => {
+    const selectedId = paymentMethodSelect.value;
+
+    // Show the description or clear it if no payment method is selected
+    if (selectedId && paymentMethodDescriptions[selectedId]) {
+      descriptionDiv.innerText = paymentMethodDescriptions[selectedId];
+      if (descriptionField) {
+        descriptionField.value = paymentMethodDescriptions[selectedId];
+      }
+    } else {
+      descriptionDiv.innerText = "";
+      if (descriptionField) {
+        descriptionField.value = "";
+      }
+    }
+  });
 });
 </script>

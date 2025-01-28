@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_24_131847) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_28_124507) do
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -69,11 +69,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_24_131847) do
     t.index ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true
   end
 
+  create_table "enabled_payment_methods", force: :cascade do |t|
+    t.integer "admin_id", null: false
+    t.integer "payment_method_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_id"], name: "index_enabled_payment_methods_on_admin_id"
+    t.index ["payment_method_id"], name: "index_enabled_payment_methods_on_payment_method_id"
+  end
+
   create_table "payment_methods", force: :cascade do |t|
     t.string "name"
     t.text "details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
   end
 
   create_table "properties", force: :cascade do |t|
@@ -114,6 +124,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_24_131847) do
   add_foreign_key "bookings", "customers"
   add_foreign_key "bookings", "properties"
   add_foreign_key "calendars", "properties"
+  add_foreign_key "enabled_payment_methods", "admins"
+  add_foreign_key "enabled_payment_methods", "payment_methods"
   add_foreign_key "properties", "admins"
   add_foreign_key "taxes", "properties"
 end

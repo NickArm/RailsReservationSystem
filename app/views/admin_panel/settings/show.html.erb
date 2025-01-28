@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Settings</h1>
+  <h2 class="mb-3">Select Payment Methods:</h2>
+
+  <%= form_with(url: admin_panel_settings_path, method: :put, local: true) do %>
+    <% @payment_methods.each do |payment_method| %>
+      <div class="row align-items-center mb-3">
+        <div class="col-md-3 d-flex align-items-center">
+          <%= check_box_tag "enabled_payment_methods[]", payment_method.id, @enabled_payment_methods.include?(payment_method.id), class: "form-check-input me-2" %>
+          <%= label_tag "enabled_payment_methods_#{payment_method.id}", payment_method.name, class: "form-check-label" %>
+        </div>
+
+        <div class="col-md-9">
+          <%= text_field_tag "payment_method_descriptions[#{payment_method.id}]", payment_method.description, class: "form-control", placeholder: "Add a description (optional)" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="mt-4">
+      <%= submit_tag "Save Settings", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

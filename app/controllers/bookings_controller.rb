@@ -1,6 +1,7 @@
 class BookingsController < ApplicationController
   before_action :set_property
   before_action :set_property, except: [ :lookup_customer ]
+  before_action :authenticate_admin!
   include BookingsHelper
 
   def index
@@ -13,6 +14,7 @@ class BookingsController < ApplicationController
   end
 
   def new
+    @enabled_payment_methods = current_admin.payment_methods
     @booking = @property.bookings.new(
       start_date: params[:start_date],
       end_date: params[:end_date],
