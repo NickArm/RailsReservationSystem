@@ -43,13 +43,15 @@ property2 = Property.create!(
     country: Faker::Address.country,
     city: Faker::Address.city,
     zip_code: Faker::Address.zip_code,
-    password: "password",
-    password_confirmation: "password"
+    password: "password", # Ensure password is provided
+    password_confirmation: "password" # Ensure confirmation matches
   )
-  customer.skip_confirmation! # Skips Devise validation (if applicable)
-  customer.save!
+  if customer.save
+    Rails.logger.info "Customer created: #{customer.email}"
+  else
+    Rails.logger.error "Failed to create customer: #{customer.errors.full_messages.join(', ')}"
+  end
 end
-
 
 # Add payment methods, including Stripe
 PaymentMethod.find_or_create_by!(name: "Pay on Arrival") do |payment|
