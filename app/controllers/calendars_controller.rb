@@ -30,13 +30,13 @@ class CalendarsController < ApplicationController
         calendar.assign_attributes(price: params[:price], status: params[:status])
 
         unless calendar.save
-          render json: { error: "Failed to save calendar entry for #{date}: #{calendar.errors.full_messages}" },
-status: :unprocessable_entity
+          render json: { error: "Failed to save calendar entry for #{date}: #{calendar.errors.full_messages.join(", ")}" },
+                 status: :unprocessable_entity
           return
         end
       end
 
-      head :ok
+      render json: { message: 'Calendar entries updated successfully' }, status: :ok
     rescue StandardError => e
       render json: { error: e.message }, status: :unprocessable_entity
     end
