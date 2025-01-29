@@ -5,9 +5,8 @@ ruby '3.2.3'
 gem 'rails', '~> 8.0.1'
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft'
-# Use postgresql as the database for Active Record
-# gem "pg", "~> 1.1"
-gem 'sqlite3'
+# Use postgresql LIVE
+gem "pg", "~> 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
@@ -64,6 +63,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
+  # Use postgresql DEV
+  gem 'sqlite3'
 end
 
 group :test do
