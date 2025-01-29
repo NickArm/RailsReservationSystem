@@ -4,7 +4,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const calendarEl = document.getElementById('calendar');
+    const calendarEl = document.getElementById('dashboard_calendar');
     if (calendarEl) {
         const calendar = new Calendar(calendarEl, {
             plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     buttonText: '2 Months',
                 },
             },
-            initialView: 'dayGridTwoMonths',
+
         });
         calendar.render();
     } else {

@@ -88,9 +88,9 @@ module AdminPanel
     end
 
     def booking_params
-      params.require(:booking).permit(
-        :property_id, :start_date, :end_date, :guest_count, :payment_method_id,
-        :customer_id, :status, :total_price
+      params.expect(
+        booking: [ :property_id, :start_date, :end_date, :guest_count, :payment_method_id,
+        :customer_id, :status, :total_price ]
       )
     end
 

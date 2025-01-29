@@ -18,8 +18,8 @@ class CustomersController < ApplicationController
     private
 
     def customer_params
-      params.require(:customer).permit(:name, :email, :phone, :address, :country, :city, :zip_code, :password,
-:password_confirmation)
+      params.expect(customer: [ :name, :email, :phone, :address, :country, :city, :zip_code, :password,
+:password_confirmation ])
     end
 
     def store_booking_referrer

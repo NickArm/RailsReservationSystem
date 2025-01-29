@@ -182,9 +182,9 @@ status: :ok
   end
 
   def booking_params
-    params.require(:booking).permit(
-      :start_date, :end_date, :guest_count, :payment_method_id, :status,
-      :name, :email, :phone, :address, :country, :zip_code, :city
+    params.expect(
+      booking: [ :start_date, :end_date, :guest_count, :payment_method_id, :status,
+      :name, :email, :phone, :address, :country, :zip_code, :city ]
     )
   end
 

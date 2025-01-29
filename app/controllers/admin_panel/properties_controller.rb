@@ -104,15 +104,15 @@ locals: { errors: [ 'Failed to remove tax' ] }) }
     end
 
     def tax_params
-      params.require(:tax).permit(:name, :rate, :rate_type, :application_case)
+      params.expect(tax: [ :name, :rate, :rate_type, :application_case ])
     end
 
     def property_params
-      params.require(:property).permit(
-        :name, :phone, :address, :country, :description, :contact_email,
+      params.expect(
+        property: [ :name, :phone, :address, :country, :description, :contact_email,
         :max_guests, :min_days_stay, :max_days_stay, :weekly_discount,
         :monthly_discount,
-        taxes_attributes: [ :id, :name, :rate_type, :rate, :application_case, :_destroy ]
+        taxes_attributes: [ :id, :name, :rate_type, :rate, :application_case, :_destroy ] ]
       )
     end
   end
