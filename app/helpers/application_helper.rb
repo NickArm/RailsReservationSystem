@@ -13,4 +13,15 @@ module ApplicationHelper
         flash_type.to_s
       end
     end
+
+    def currency_symbol(currency_code)
+      case currency_code
+      when 'usd'
+        '$'
+      when 'eur'
+        '€'
+      else
+        ''
+      end
+    end
 end

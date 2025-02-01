@@ -49,7 +49,7 @@ property2 = Property.create!(
   if customer.save
     Rails.logger.info "Customer created: #{customer.email}"
   else
-    Rails.logger.error "Failed to create customer: #{customer.errors.full_messages.join(', ')}"
+    Rails.logger.error "Failed to create customer: #{customer.errors.full_messages.join(", ")}"
   end
 end
 
@@ -67,14 +67,14 @@ PaymentMethod.find_or_create_by!(name: "Stripe") do |payment|
 end
 
 # Add reservation statuses
-["Unpaid", "Confirm Payment", "Paid", "Canceled"].each do |status|
+[ "Unpaid", "Confirm Payment", "Paid", "Canceled" ].each do |status|
   ReservationStatus.find_or_create_by!(name: status)
 end
 
 # Open calendar for both houses from 1/1/2025 to 30/6/2025 with price 150/day
 (1..181).each do |day_offset|
   date = Date.new(2025, 1, 1) + day_offset - 1
-  [property1, property2].each do |property|
+  [ property1, property2 ].each do |property|
     Calendar.find_or_create_by!(property: property, date: date) do |calendar|
       calendar.status = "open"
       calendar.price = 150.0
@@ -91,7 +91,7 @@ customers.each do |customer|
     end_date = start_date + rand(3..10)
 
     Booking.create!(
-      property: [property1, property2].sample,
+      property: [ property1, property2 ].sample,
       start_date: start_date,
       end_date: end_date,
       guest_count: rand(1..4),

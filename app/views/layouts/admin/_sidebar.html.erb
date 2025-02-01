@@ -6,17 +6,8 @@
   </a>
 
   <!-- Sidebar -->
-  <div class="sidebar">
-    <!-- User Panel -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img src="https://adminlte.io/themes/v3/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block"><%= current_admin.email %></a>
-      </div>
-    </div>
 
+  <div>
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -40,10 +31,37 @@
         </li>
         <li class="nav-item">
           <a href="/admin/customers" class="nav-link">
-            <i class="nav-icon fas fa-building"></i>
+            <i class="nav-icon fas fa-users"></i>
             <p>Customers</p>
           </a>
         </li>
+        <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-credit-card"></i>
+                  <p>
+                  Finances
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Reports</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/admin/invoices" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Invoices</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+
+
+
         <li class="nav-item">
           <a href="/admin/search/new" class="nav-link">
             <i class="nav-icon fas fa-building"></i>
@@ -56,6 +74,13 @@
             <p>Settings</p>
           </a>
         </li>
+        <li class="nav-item">
+        <%= form_with(url: destroy_admin_session_path, method: :delete, class: "nav-link", style: "display: inline;") do %>
+          <i class="nav-icon fas fa-sign-out-alt"></i>
+          <%= submit_tag "Logout", class: "btn btn-link p-0 text-light", data: { disable_with: "Logging out..." } %>
+        <% end %>
+      </li>
+
       </ul>
     </nav>
   </div>

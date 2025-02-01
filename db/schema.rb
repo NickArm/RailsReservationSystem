@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_28_124507) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_31_161757) do
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -78,6 +106,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_28_124507) do
     t.index ["payment_method_id"], name: "index_enabled_payment_methods_on_payment_method_id"
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.integer "booking_id", null: false
+    t.integer "customer_id", null: false
+    t.string "invoice_number"
+    t.decimal "total_amount"
+    t.decimal "tax_amount"
+    t.integer "payment_status"
+    t.datetime "issued_date"
+    t.datetime "due_date"
+    t.datetime "paid_date"
+    t.text "notes"
+    t.string "vat_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_invoices_on_booking_id"
+    t.index ["customer_id"], name: "index_invoices_on_customer_id"
+  end
+
   create_table "payment_methods", force: :cascade do |t|
     t.string "name"
     t.text "details"
@@ -104,10 +150,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_28_124507) do
     t.index ["admin_id"], name: "index_properties_on_admin_id"
   end
 
-  create_table "reservation_statuses", force: :cascade do |t|
-    t.string "name"
+  create_table "settings", force: :cascade do |t|
+    t.string "company_name"
+    t.string "registration_number"
+    t.string "phone"
+    t.string "address"
+    t.string "city"
+    t.string "logo"
+    t.string "language"
+    t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "company_postcode"
+    t.string "company_email"
+    t.string "notifications_email"
   end
 
   create_table "taxes", force: :cascade do |t|
@@ -121,11 +177,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_28_124507) do
     t.index ["property_id"], name: "index_taxes_on_property_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bookings", "customers"
   add_foreign_key "bookings", "properties"
   add_foreign_key "calendars", "properties"
   add_foreign_key "enabled_payment_methods", "admins"
   add_foreign_key "enabled_payment_methods", "payment_methods"
+  add_foreign_key "invoices", "bookings"
+  add_foreign_key "invoices", "customers"
   add_foreign_key "properties", "admins"
   add_foreign_key "taxes", "properties"
 end

@@ -8,7 +8,7 @@
         <th>Name</th>
         <th>Address</th>
         <th>Max Guests</th>
-        <th>Actions</th>
+        <th>Book Now</th>
       </tr>
     </thead>
     <tbody>
@@ -18,7 +18,7 @@
           <td><%= property.address %></td>
           <td><%= property.max_guests %></td>
           <td>
-            <%= link_to "Book Now", new_property_booking_path(property, start_date: params[:start_date], end_date: params[:end_date]), class: "btn btn-primary" %>
+            <%= link_to "Book Now", new_property_booking_path(property, start_date: params[:start_date], end_date: params[:end_date],  guest_count: params[:guest_count]), class: "btn btn-primary" %>
           </td>
         </tr>
       <% end %>

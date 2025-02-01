@@ -1,10 +1,15 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :load_settings
 
   private
 
   def redirect_to_admin_dashboard
     redirect_to admin_path if request.path == root_path
+  end
+
+  def load_settings
+    @settings = Setting.first_or_initialize
   end
 
   protected

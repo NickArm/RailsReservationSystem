@@ -1,5 +1,5 @@
 <footer class="main-footer">
-  <strong>Copyright &copy; <%= Time.now.year %> <a href="#">Your Company</a>.</strong>
+  <strong>Copyright &copy; <%= Time.now.year %> <%= @settings.company_name.presence || "Your Company" %>.</strong>
   All rights reserved.
   <div class="float-right d-none d-sm-inline-block">
     <b>Version</b> 1.0.0

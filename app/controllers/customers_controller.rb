@@ -8,7 +8,7 @@ class CustomersController < ApplicationController
     def update
       @customer = current_customer
       if @customer.update(customer_params)
-        redirect_to(session[:booking_referrer] || root_path, notice: 'Profile updated successfully.')
+        redirect_to(session[:booking_referrer] || root_path, notice: t('.success'))
       else
         flash.now[:alert] = @customer.errors.full_messages.to_sentence
         render :profile

@@ -1,0 +1,2 @@
+module AdminPanel::InvoicesHelper
+end

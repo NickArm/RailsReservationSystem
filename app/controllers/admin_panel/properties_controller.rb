@@ -47,7 +47,7 @@ module AdminPanel
     # TAXES MANAGEMENT
     def manage_taxes
       @taxes = @property.taxes
-      @new_tax = @property.taxes.build # For new tax form
+      @new_tax = @property.taxes.build
     end
 
     def create_tax
@@ -56,7 +56,7 @@ module AdminPanel
       if @tax.save
         respond_to do |format|
           format.html {
- redirect_to manage_taxes_admin_panel_property_path(@property), notice: 'Tax added successfully.' }
+ redirect_to manage_taxes_admin_panel_property_path(@property), notice: t('.success') }
           format.turbo_stream
         end
       else
@@ -80,7 +80,7 @@ locals: { tax: @tax })
         respond_to do |format|
           format.turbo_stream
           format.html {
- redirect_to manage_taxes_admin_panel_property_path(@property), notice: 'Tax removed successfully.' }
+ redirect_to manage_taxes_admin_panel_property_path(@property), notice: t('.success')}
         end
       else
         respond_to do |format|
@@ -88,7 +88,7 @@ locals: { tax: @tax })
  render turbo_stream: turbo_stream.replace('tax_errors', partial: 'shared/errors',
 locals: { errors: [ 'Failed to remove tax' ] }) }
           format.html do
-            flash[:alert] = 'Failed to remove tax.'
+            flash[:alert] = t('.error')
             redirect_to manage_taxes_admin_panel_property_path(@property)
           end
         end
@@ -100,7 +100,7 @@ locals: { errors: [ 'Failed to remove tax' ] }) }
     def set_property
       @property = current_admin.properties.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      redirect_to admin_panel_properties_path, alert: 'Property not found.'
+      redirect_to admin_panel_properties_path, alert: t('admin_panel.properties.set_property.not_found')
     end
 
     def tax_params

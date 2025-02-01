@@ -1,23 +1,101 @@
-<div class="container mt-5">
-  <h1 class="mb-4">Settings</h1>
-  <h2 class="mb-3">Select Payment Methods:</h2>
+<div>
+  <%= form_with(url: admin_panel_settings_path, method: :put, local: true, multipart: true, class: "p-3") do %>
 
-  <%= form_with(url: admin_panel_settings_path, method: :put, local: true) do %>
-    <% @payment_methods.each do |payment_method| %>
-      <div class="row align-items-center mb-3">
-        <div class="col-md-3 d-flex align-items-center">
-          <%= check_box_tag "enabled_payment_methods[]", payment_method.id, @enabled_payment_methods.include?(payment_method.id), class: "form-check-input me-2" %>
-          <%= label_tag "enabled_payment_methods_#{payment_method.id}", payment_method.name, class: "form-check-label" %>
-        </div>
-
-        <div class="col-md-9">
-          <%= text_field_tag "payment_method_descriptions[#{payment_method.id}]", payment_method.description, class: "form-control", placeholder: "Add a description (optional)" %>
+    <!-- Company Info Section -->
+    <div class="card mb-5">
+      <div class="card-header">
+        <h2 class="mb-0"><i class="fas fa-building"></i> Company Information</h2>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <%= label_tag :company_name, "Company Name", class: "form-label" %>
+            <%= text_field_tag "setting[company_name]", @settings&.company_name, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :registration_number, "Registration Number", class: "form-label" %>
+            <%= text_field_tag "setting[registration_number]", @settings&.registration_number, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :phone, "Phone", class: "form-label" %>
+            <%= text_field_tag "setting[phone]", @settings&.phone, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :company_email, "Company Email", class: "form-label" %>
+            <%= text_field_tag "setting[company_email]", @settings&.company_email, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :address, "Address", class: "form-label" %>
+            <%= text_field_tag "setting[address]", @settings&.address, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :city, "City", class: "form-label" %>
+            <%= text_field_tag "setting[city]", @settings&.city, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :company_postcode, "Company Postcode", class: "form-label" %>
+            <%= text_field_tag "setting[company_postcode]", @settings&.company_postcode, class: "form-control" %>
+          </div>
         </div>
       </div>
-    <% end %>
+    </div>
 
-    <div class="mt-4">
-      <%= submit_tag "Save Settings", class: "btn btn-primary" %>
+    <!-- Application Preferences Section -->
+    <div class="card mb-5">
+      <div class="card-header">
+        <h2 class="mb-0"><i class="fas fa-cogs"></i> Application Preferences</h2>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <%= label_tag :language, "Language", class: "form-label" %>
+            <%= select_tag "setting[language]", options_for_select([["English", "en"], ["Greek", "gr"]], @settings&.language), class: "form-select" %>
+          </div>
+          <div class="col-md-6">
+            <%= label_tag :currency, "Currency", class: "form-label" %>
+            <%= select_tag "setting[currency]", options_for_select([["USD ($)", "usd"], ["Euro (€)", "eur"]], @settings&.currency), class: "form-select" %>
+          </div>
+          <div class="col-md-6">
+            <h3 class="mb-3"><i class="fas fa-image"></i> Company Logo</h3>
+            <% if @settings&.logo&.attached? %>
+              <img src="<%= url_for(@settings.logo) %>" alt="Company Logo" class="img-fluid mb-3 border rounded p-2" style="max-height: 100px;">
+            <% else %>
+              <p class="text-muted">No logo uploaded yet.</p>
+            <% end %>
+            <%= file_field_tag "setting[logo]", class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <h3 class="mb-3"><i class="fas fa-envelope"></i> Notifications</h3>
+            <%= label_tag :notifications_email, "Notifications Email", class: "form-label" %>
+            <%= text_field_tag "setting[notifications_email]", @settings&.notifications_email, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Methods Section -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="mb-0"><i class="fas fa-credit-card"></i> Payment Methods</h2>
+      </div>
+      <div class="card-body">
+        <% @payment_methods.each do |payment_method| %>
+          <div class="row align-items-center mb-3 g-3">
+            <div class="col-md-3">
+              <%= check_box_tag "enabled_payment_methods[]", payment_method.id, @enabled_payment_methods.include?(payment_method.id), class: "form-check-input me-2" %>
+              <%= label_tag "enabled_payment_methods_#{payment_method.id}", payment_method.name, class: "form-check-label" %>
+            </div>
+            <div class="col-md-9">
+              <%= text_field_tag "payment_method_descriptions[#{payment_method.id}]", payment_method.description, class: "form-control", placeholder: "Add a description (optional)" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="text-center mt-4">
+      <%= submit_tag "Save Settings", class: "btn btn-primary btn-lg px-4" %>
     </div>
   <% end %>
 </div>

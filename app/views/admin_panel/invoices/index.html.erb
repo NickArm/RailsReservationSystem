@@ -1,0 +1,37 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">All Invoices</h4>
+    </div>
+    <div class="card-body">
+      <table id="all-invoices-table" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Invoice Number</th>
+            <th>Customer</th>
+            <th>Booking</th>
+            <th>Status</th>
+            <th>Issued Date</th>
+            <th>Total Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @invoices.each do |invoice| %>
+            <tr>
+              <td><%= invoice.invoice_number %></td>
+              <td><%= invoice.customer.name %></td>
+              <td><%= link_to invoice.booking.unique_code, admin_panel_booking_path(invoice.booking) %></td>
+              <td><%= invoice.payment_status.humanize %></td>
+              <td><%= invoice.issued_date.strftime("%Y-%m-%d") %></td>
+              <td><%= number_to_currency(invoice.total_amount, unit: currency_symbol(@settings.currency)) %></td>
+              <td>
+                <%= link_to "View", admin_panel_invoice_path(invoice), class: "btn btn-info btn-sm" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

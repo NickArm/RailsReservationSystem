@@ -43,69 +43,70 @@
 
     <!-- Price Breakdown -->
     <div class="col-lg-4">
-      <% if @price_breakdown.present? %>
-        <div class="card shadow">
-          <div class="card-header bg-info text-white">
-            <h4>Price Breakdown</h4>
-          </div>
-          <div class="card-body">
-            <table class="table table-bordered">
-              <thead>
+  <% if @price_breakdown.present? %>
+    <div class="card shadow">
+      <div class="card-header bg-info text-white">
+        <h4>Price Breakdown</h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Price (<%= currency_symbol(@settings&.currency || 'usd') %>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @price_breakdown.each do |entry| %>
+              <tr>
+                <td><%= entry[:date]&.strftime('%Y-%m-%d') || "N/A" %></td>
+                <td><%= number_to_currency(entry[:price], unit: currency_symbol(@settings&.currency || 'usd')) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td><strong>Total Before Discount:</strong></td>
+              <td><%= number_to_currency(@base_total_price || 0, unit: currency_symbol(@settings&.currency || 'usd')) %></td>
+            </tr>
+            <% if @discount.present? && @discount > 0 %>
+              <tr>
+                <td><strong>Discount Applied:</strong></td>
+                <td><%= number_to_currency(@discount, unit: currency_symbol(@settings&.currency || 'usd')) %> (<%= @discount_type %>)</td>
+              </tr>
+            <% end %>
+            <tr>
+              <td><strong>Total Before Taxes:</strong></td>
+              <td><%= number_to_currency(@total_before_discount || 0, unit: currency_symbol(@settings&.currency || 'usd')) %></td>
+            </tr>
+            <% if @tax_details.present? %>
+              <% @tax_details.each do |tax| %>
                 <tr>
-                  <th>Date</th>
-                  <th>Price</th>
+                  <td><strong><%= tax[:name] %> (<%= tax[:rate_type].capitalize %> - <%= tax[:application_case].humanize %>):</strong></td>
+                  <td><%= number_to_currency(tax[:amount], unit: currency_symbol(@settings&.currency || 'usd')) %></td>
                 </tr>
-              </thead>
-              <tbody>
-                <% @price_breakdown.each do |entry| %>
-                  <tr>
-                    <td><%= entry[:date].strftime('%Y-%m-%d') %></td>
-                    <td><%= number_to_currency(entry[:price]) %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td><strong>Total Before Discount:</strong></td>
-                  <td><%= number_to_currency(@base_total_price || 0) %></td>
-                </tr>
-                <% if @discount.present? && @discount > 0 %>
-                  <tr>
-                    <td><strong>Discount Applied:</strong></td>
-                    <td><%= number_to_currency(@discount) %> (<%= @discount_type %>)</td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><strong>Total Before Taxes:</strong></td>
-                  <td><%= number_to_currency(@total_before_discount || 0) %></td>
-                </tr>
-                <% if @tax_details.present? %>
-                  <% @tax_details.each do |tax| %>
-                    <tr>
-                      <td><strong><%= tax[:name] %> (<%= tax[:rate_type].capitalize %> - <%= tax[:application_case].humanize %>):</strong></td>
-                      <td><%= number_to_currency(tax[:amount]) %></td>
-                    </tr>
-                  <% end %>
-                  <tr>
-                    <td><strong>Total Taxes:</strong></td>
-                    <td><%= number_to_currency(@total_taxes || 0) %></td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td><strong>Total Price:</strong></td>
-                  <td class="text-success"><%= number_to_currency(@total_price || 0) %></td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </div>
-      <% else %>
-        <div class="card shadow">
-          <div class="card-body">
-            <p class="text-muted">No price breakdown available.</p>
-          </div>
-        </div>
-      <% end %>
+              <% end %>
+              <tr>
+                <td><strong>Total Taxes:</strong></td>
+                <td><%= number_to_currency(@total_taxes || 0, unit: currency_symbol(@settings&.currency || 'usd')) %></td>
+              </tr>
+            <% end %>
+            <tr>
+              <td><strong>Total Price:</strong></td>
+              <td class="text-success"><%= number_to_currency(@total_price || 0, unit: currency_symbol(@settings&.currency || 'usd')) %></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
+  <% else %>
+    <div class="card shadow">
+      <div class="card-body">
+        <p class="text-muted">No price breakdown available.</p>
+      </div>
+    </div>
+  <% end %>
+</div>
+
   </div>
 </div>

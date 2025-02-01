@@ -2,12 +2,11 @@ class Booking < ApplicationRecord
   # Associations
   belongs_to :customer
   belongs_to :property
-  belongs_to :payment_method, optional: false # Set to false if always required
-  belongs_to :reservation_status,
-             foreign_key: :status,
-             class_name: 'ReservationStatus',
-             optional: true,
-             inverse_of: :bookings
+  belongs_to :payment_method, optional: false
+  has_many :invoices, dependent: :destroy
+
+  # Enum for status
+  enum :status, { unpaid: 0, confirm_payment: 1, paid: 2, canceled: 3 }
 
   accepts_nested_attributes_for :customer
 
@@ -26,6 +25,9 @@ class Booking < ApplicationRecord
   # Delegations
   delegate :name, to: :customer, prefix: true, allow_nil: true
 
+  # Create Invoice after successful payment
+  # aafter_update :generate_invoice, if: -> { saved_change_to_status? && status == 'paid' }
+
   # Custom Getter and Setter for Reservation Status
   def reservation_status
     ReservationStatus.find_by(id: status) || super
@@ -36,7 +38,36 @@ class Booking < ApplicationRecord
     self.status = status_obj.id if status_obj.present?
   end
 
-  # Validation Methods
+  # #For invoices
+  # def generate_invoice
+  #   Rails.logger.debug "Generating invoice for Booking ##{id}"
+  #   Rails.logger.debug "Customer: #{customer.inspect}"
+  #   Rails.logger.debug "Invoice Number: #{generate_invoice_number}"
+  #   Rails.logger.debug "Total Amount: #{total_price}"
+  #   Rails.logger.debug "Tax Amount: #{calculate_tax_amount}"
+
+  #   Invoice.create!(
+  #     booking: self,
+  #     customer: customer,
+  #     invoice_number: generate_invoice_number,
+  #     total_amount: total_price,
+  #     tax_amount: calculate_tax_amount,
+  #     issued_date: Time.zone.now,
+  #     due_date: Time.zone.now + 7.days,
+  #     payment_status: :pending,
+  #     vat_number: customer.vat_number || 'DEFAULT_VAT' # Replace with a default value or proper logic
+  #   )
+  # end
+
+  # def generate_invoice_number
+  #   "#{Time.zone.now.year}-#{SecureRandom.hex(4).upcase}"
+  # end
+
+  def calculate_tax_amount # NEED FIX
+    tax_rate = property&.taxes&.sum(&:rate) || 0
+    total_price * (tax_rate / 100.0)
+  end
+
   private
 
   def generate_unique_code
@@ -74,7 +105,7 @@ class Booking < ApplicationRecord
   end
 
   def ensure_canceled_status
-    unless reservation_status&.name == 'Canceled'
+    unless canceled?
       errors.add(:base, 'Booking cannot be deleted unless it is canceled.')
       throw(:abort)
     end

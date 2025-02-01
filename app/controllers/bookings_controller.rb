@@ -2,10 +2,11 @@ class BookingsController < ApplicationController
   before_action :set_property
   before_action :set_property, except: [ :lookup_customer ]
   before_action :authenticate_admin!
+  before_action :set_settings
   include BookingsHelper
 
   def index
-    @bookings = Booking.includes(:customer, :property, :payment_method, :reservation_status)
+    @bookings = Booking.includes(:customer, :property, :payment_method)
                        .order(created_at: :desc)
   end
 
@@ -115,6 +116,10 @@ status: :ok
   end
 
   private
+
+  def set_settings
+    @settings = Setting.first_or_initialize
+  end
 
   def set_property
     @property = Property.find(params[:property_id])

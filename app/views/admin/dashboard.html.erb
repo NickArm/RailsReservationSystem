@@ -1,74 +1,139 @@
-<div class="mt-5">
-  <h1>Welcome, <%= current_admin.email %>!</h1>
-  <div class="mb-4 d-flex gap-2">
-    <%= link_to "Add New Property", new_admin_panel_property_path, class: "btn btn-success" %>
-    <%= link_to "View All Bookings", admin_panel_bookings_path, class: "btn btn-info" %>
-    <%= link_to "Search Availability", new_admin_panel_search_path, class: "btn btn-primary" %>
+<div class="wrapper">
+  <!-- Colored Boxes Section -->
+  <div class="row mt-3">
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-info">
+        <div class="inner">
+          <h3><%= @total_bookings %></h3>
+          <p>Total Bookings</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <a href="/admin/bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3><%= @upcoming_bookings_dashboard %></h3>
+          <p>Upcoming Bookings</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <a href="/admin/bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-warning">
+        <div class="inner">
+          <h3><%= @total_customers %></h3>
+          <p>Total Customers</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <a href="/admin/customers" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-danger">
+        <div class="inner">
+          <h3> <%= number_to_currency(@total_income|| 0, unit: currency_symbol(@settings&.currency || 'usd')) %></h3>
+          <p>Total Income</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
   </div>
 
-  <!-- First Section -->
-  <div class="row">
+  <!-- Calendar Section -->
+  <div class="row mt-4">
     <div class="col-md-6">
-      <div id="dashboard_calendar"></div>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Calendar</h3>
+        </div>
+        <div class="card-body">
+          <div id="dashboard_calendar"></div>
+        </div>
+      </div>
     </div>
+
+    <!-- Upcoming Bookings Section -->
     <div class="col-md-6">
-      <h2>Upcoming Bookings</h2>
-      <p>The next 5 bookings in the future:</p>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Property</th>
-            <th>Guest Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @upcoming_bookings.each do |booking| %>
-            <tr>
-              <td><%= booking.property.name %></td>
-              <td><%= booking.customer.name %></td>
-              <td><%= booking.start_date.strftime("%Y-%m-%d") %></td>
-              <td><%= booking.end_date.strftime("%Y-%m-%d") %></td>
-              <td>
-                <%= link_to "View", admin_panel_booking_path(booking), class: "btn btn-primary btn-sm" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Upcoming Bookings</h3>
+        </div>
+        <div class="card-body">
+          <table id="upcoming-bookings" class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Guest Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @upcoming_bookings.each do |booking| %>
+                <tr>
+                  <td><%= booking.property.name %></td>
+                  <td><%= booking.customer.name %></td>
+                  <td><%= booking.start_date.strftime("%Y-%m-%d") %></td>
+                  <td><%= booking.end_date.strftime("%Y-%m-%d") %></td>
+                  <td>
+                    <%= link_to "View", admin_panel_booking_path(booking), class: "btn btn-primary btn-sm" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Second Section -->
-  <div class="row mt-5">
+  <!-- Properties Section -->
+  <div class="row mt-4">
     <div class="col-12">
-      <h2>Properties</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Max Guests</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @properties.each do |property| %>
-            <tr>
-              <td><%= property.name %></td>
-              <td><%= property.address %></td>
-              <td><%= property.max_guests %></td>
-              <td>
-                <%= link_to "View", admin_panel_property_path(property), class: "btn btn-primary btn-sm" %>
-                <%= link_to "Edit", edit_admin_panel_property_path(property), class: "btn btn-warning btn-sm" %>
-                <%= link_to "Delete", admin_panel_property_path(property), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Properties</h3>
+        </div>
+        <div class="card-body">
+          <table id="properties-table" class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Max Guests</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @properties.each do |property| %>
+                <tr>
+                  <td><%= property.name %></td>
+                  <td><%= property.address %></td>
+                  <td><%= property.max_guests %></td>
+                  <td>
+                    <%= link_to "View", admin_panel_property_path(property), class: "btn btn-primary btn-sm" %>
+                    <%= link_to "Edit", edit_admin_panel_property_path(property), class: "btn btn-warning btn-sm" %>
+                    <%= link_to "Delete", admin_panel_property_path(property), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

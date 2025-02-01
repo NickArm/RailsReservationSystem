@@ -4,10 +4,11 @@ module AdminPanel
     before_action :authenticate_admin!
     before_action :set_booking, only: %i[show edit update destroy]
     before_action :load_payment_methods, only: %i[edit update]
+    before_action :set_settings
     layout 'admin'
 
     def index
-      @bookings = Booking.includes(:customer, :property, :payment_method, :reservation_status)
+      @bookings = Booking.includes(:customer, :property, :payment_method)
                          .order(created_at: :desc)
     end
 
@@ -78,6 +79,10 @@ module AdminPanel
     end
 
     private
+
+    def set_settings
+      @settings = Setting.first_or_initialize
+    end
 
     def set_booking
       @booking = Booking.find(params[:id])

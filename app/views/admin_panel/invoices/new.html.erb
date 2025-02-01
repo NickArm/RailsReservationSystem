@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <h1>Create Invoice</h1>
+  <%= form_with(model: @invoice, url: admin_panel_booking_invoices_path(@booking), local: true) do |f| %>
+    <div class="mb-3">
+      <%= f.label :invoice_number, "Invoice Number" %>
+      <%= f.text_field :invoice_number, class: "form-control", readonly: true, value: @invoice.invoice_number %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :customer_name, "Customer Name" %>
+      <%= f.text_field :customer_name, class: "form-control", readonly: true, value: @invoice.customer.name %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :total_amount, "Total Amount" %>
+      <%= f.number_field :total_amount, step: 0.01, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :tax_amount, "Tax Amount" %>
+      <%= f.number_field :tax_amount, step: 0.01, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :vat_number, "VAT Number" %>
+      <%= f.text_field :vat_number, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :issued_date, "Issued Date" %>
+      <%= f.date_field :issued_date, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :due_date, "Due Date" %>
+      <%= f.date_field :due_date, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :payment_status, "Payment Status" %>
+      <%= f.select :payment_status, Invoice.payment_statuses.keys.map { |s| [s.humanize, s] }, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :notes, "Notes" %>
+      <%= f.text_area :notes, class: "form-control" %>
+    </div>
+
+    <%= f.submit "Save Invoice", class: "btn btn-primary" %>
+  <% end %>
+</div>

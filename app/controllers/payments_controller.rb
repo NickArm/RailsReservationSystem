@@ -18,7 +18,7 @@ class PaymentsController < ApplicationController
         price_data: {
           currency: 'usd',
           product_data: {
-            name: "Booking ##{@booking.id} for #{@booking.property.name}"
+            name: t('payments.create.product_name', booking_id: @booking.id, property_name: @booking.property.name)
           },
           unit_amount: (total_price * 100).to_i
         },
@@ -35,23 +35,25 @@ class PaymentsController < ApplicationController
   end
 
   def success
-    paid_status = ReservationStatus.find_by(name: 'Paid')
-    if paid_status && @booking.update(reservation_status: paid_status)
+    if @booking.update!(status: :paid)
+      invoice = @booking.invoices.last
+      invoice.update!(payment_status: :paid) if invoice
+
       BookingMailer.admin_notification(@booking).deliver_now
       BookingMailer.customer_notification(@booking).deliver_now
-      redirect_to property_booking_path(@booking.property, @booking),
-notice: 'Payment successful! Your booking is confirmed.'
+
+      redirect_to property_booking_path(@booking.property, @booking), notice: t('.booking_confirmed')
     else
-      Rails.logger.error "Failed to update booking: #{@booking.errors.full_messages}"
-      redirect_to property_booking_path(@booking.property, @booking),
-alert: 'Payment was successful, but there was an issue updating the booking.'
+      redirect_to property_booking_path(@booking.property, @booking), alert: t('.booking_update_failed')
     end
   end
 
   def cancel
-    @booking.update(status: 'unpaid') if @booking
-
-    redirect_to property_booking_path(@booking.property, @booking), alert: 'Payment was canceled. Please try again.'
+    if @booking.update(status: :unpaid)
+      redirect_to property_booking_path(@booking.property, @booking), notice: t('.payment_canceled')
+    else
+      redirect_to property_booking_path(@booking.property, @booking), alert: t('.booking_update_failed')
+    end
   end
 
   private
@@ -59,6 +61,6 @@ alert: 'Payment was successful, but there was an issue updating the booking.'
   def set_booking
     @booking = Booking.find(params[:booking_id])
   rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: 'Booking not found.'
+    redirect_to root_path, alert: t('payments.set_booking.not_found')
   end
 end

@@ -21,9 +21,6 @@ AllCops:
     - 'config/**/*' # Ignore Rails configuration files
     - 'db/migrate/*' # Ignore migrate files
 
-Layout/LineLength:
-  Max: 120 # Max characters per line
-
 Layout/TrailingWhitespace:
   Enabled: true # Ensure trailing whitespace is removed
 

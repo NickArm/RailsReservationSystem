@@ -1,0 +1,59 @@
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header text-center bg-primary text-white">
+      <h3>Invoice</h3>
+    </div>
+    <div class="card-body">
+      <!-- Company Details -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <h5><strong>From:</strong></h5>
+          <p>
+          <strong><%= @settings.company_name %></strong><br>
+          <%= @settings.address %><br>
+          <%= @settings.city %>, <%= @settings.company_postcode %><br>
+          Email: <%= @settings.company_email %><br>
+          </p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <h5><strong>To:</strong></h5>
+          <p>
+            <strong><%= @invoice.customer.name %></strong><br>
+            Email: <%= @invoice.customer.email %>
+          </p>
+        </div>
+      </div>
+
+      <!-- Invoice Details -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <p><strong>Invoice Number:</strong> <%= @invoice.invoice_number %></p>
+          <p><strong>Booking:</strong> <%= link_to @invoice.booking.unique_code, admin_panel_booking_path(@invoice.booking) %></p>
+          <p><strong>Issued Date:</strong> <%= @invoice.issued_date.strftime("%Y-%m-%d") %></p>
+          <p><strong>Due Date:</strong> <%= @invoice.due_date.strftime("%Y-%m-%d") %></p>
+          <p><strong>Status:</strong> <%= @invoice.payment_status.humanize %></p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p><strong>Total Amount:</strong> <%= number_to_currency(@invoice.total_amount, unit: currency_symbol(@settings.currency)) %></p>
+          <p><strong>Tax Amount:</strong> <%= number_to_currency(@invoice.tax_amount, unit: currency_symbol(@settings.currency)) %></p>
+          <% if @invoice.notes.present? %>
+            <p><strong>Notes:</strong> <%= @invoice.notes %></p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Footer Section -->
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <hr>
+          <p class="text-muted">
+            <%= @settings.company_name %> | <%= @settings.address %>, <%= @settings.city %>
+          </p>
+          <p class="text-muted">
+            VAT Number: <%= @settings.registration_number %> | Email: <%= @settings.company_email %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -73,8 +73,9 @@
             </h5>
             <div class="mb-3">
               <%= f.label :status, "Status", class: "form-label" %>
-              <%= f.collection_select :status, ReservationStatus.all, :id, :name, { selected: @booking.status }, class: "form-select" %>
+              <%= f.select :status, Booking.statuses.keys.map { |key| [key.titleize, key] }, { selected: @booking.status }, class: "form-select" %>
             </div>
+
           </div>
           <div class="col-md-6">
             <h5 class="mb-3 text-primary">

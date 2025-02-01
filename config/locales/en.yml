@@ -28,6 +28,9 @@
 #       enabled: "ON"
 
 en:
+  customers:
+    update:
+      success: "Profile updated successfully."
   bookings:
     new:
       invalid_dates: "Invalid dates selected. Please choose valid start and end dates."
@@ -38,6 +41,16 @@ en:
       weekly: "Weekly Discount"
       none: "No Discount"
     no_discount: "No Discount"
+  payments:
+    create:
+      product_name: "Booking #%{booking_id} for %{property_name}"
+    success:
+      booking_confirmed: "Payment successful! Your booking is confirmed."
+      booking_update_failed: "Payment was successful, but there was an issue updating the booking."
+    cancel:
+      payment_canceled: "Payment was canceled. Please try again."
+    set_booking:
+      not_found: "Booking not found."
   search:
     errors:
       no_properties_available: "No houses are available for the selected dates or the stay duration doesn't meet the property's requirements."
@@ -45,6 +58,8 @@ en:
     notices:
       multiple_properties_available: "Multiple houses are available. Please select one."
       search_completed: "Search completed successfully."
+
+  #------ ADMIN ------#
   admin_panel:
     search:
         errors:
@@ -78,3 +93,20 @@ en:
       destroy:
         success: "Property deleted successfully."
         error: "There was an error deleting the property."
+      create_tax:
+        success: "Tax added successfully."
+      destroy_tax:
+        success: "Tax removed successfully."
+        error: "Failed to remove tax."
+      set_property:
+        not_found: "Property not found."
+    settings:
+      update:
+        success: "Settings updated successfully."
+  # ----- MAILERS --------#
+  mailers:
+    booking_mailer:
+      admin_notification:
+        subject: "New Booking Received"
+      customer_notification:
+        subject: "Your Booking Confirmation"
