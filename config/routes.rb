@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  namespace :admin_panel do
+    get "finances/index"
+    get "finances/revenue_report"
+    get "finances/pending_payments"
+    get "finances/tax_report"
+    get "finances/payment_methods"
+    get "finances/profitability"
+  end
   # Devise routes for Admin
   devise_for :admins, controllers: { sessions: 'admin/sessions' }
 
@@ -22,6 +30,16 @@ Rails.application.routes.draw do
         get :calendar_data
       end
 
+    end
+
+    resources :finances, only: [:index] do
+      collection do
+        get :revenue_report
+        get :pending_payments
+        get :tax_report
+        get :payment_methods
+        get :profitability
+      end
     end
 
     resources :properties do

@@ -1,0 +1,58 @@
+<h1>Financial Overview</h1>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card bg-primary text-white">
+      <div class="card-body">
+        <h5>Total Revenue</h5>
+        <p><%= number_to_currency(@total_revenue) %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card bg-warning text-white">
+      <div class="card-body">
+        <h5>Pending Payments</h5>
+        <p><%= number_to_currency(@pending_payments) %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card bg-success text-white">
+      <div class="card-body">
+        <h5>Taxes Collected</h5>
+        <p><%= number_to_currency(@total_taxes) %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>Payment Method Statistics</h2>
+<ul>
+  <% @payment_methods.each do |method| %>
+    <li>
+      <%= method.name %>: <%= method.transaction_count %> transactions -
+      <%= number_to_currency(method.total_revenue) %>
+    </li>
+  <% end %>
+</ul>
+
+<h2>Collected Taxes Breakdown</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Tax Name</th>
+      <th>Collected Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tax_summary.each do |tax_name, total_collected| %>
+      <tr>
+        <td><%= tax_name %></td>
+        <td><%= number_to_currency(total_collected) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

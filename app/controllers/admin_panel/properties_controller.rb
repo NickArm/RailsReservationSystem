@@ -28,9 +28,11 @@ module AdminPanel
     end
 
     def update
+      Rails.logger.debug { "Property Params: #{property_params.inspect}" }
       if @property.update(property_params)
         redirect_to admin_panel_properties_path, notice: t('.success')
       else
+        Rails.logger.debug { "Property Errors: #{@property.errors.full_messages}" }
         flash.now[:alert] = t('.error')
         render :edit
       end

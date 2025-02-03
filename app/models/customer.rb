@@ -11,4 +11,13 @@ class Customer < ApplicationRecord
     validates :country, presence: true
     validates :city, presence: true
     validates :zip_code, presence: true
+
+    # Skip password validation if a password is not required
+    validates :password, presence: true, if: :password_required?
+
+    private
+
+    def password_required?
+      new_record? || password.present?
+    end
 end

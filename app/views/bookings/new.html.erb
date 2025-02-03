@@ -80,16 +80,19 @@
               <i class="bi bi-wallet2"></i> Payment Information
             </h5>
             <div class="mb-3">
-              <%= form.label :payment_method_id, "Payment Method", class: "form-label" %>
-              <%= form.collection_select :payment_method_id,
-                                          current_admin.enabled_payment_methods.includes(:payment_method).map(&:payment_method),
-                                          :id,
-                                          :name,
-                                          { prompt: "Select a Payment Method" },
-                                          { class: "form-control", id: "payment-method-select" } %>
+            <%= form.label :payment_method_id, "Payment Method", class: "form-label" %>
+            <%= form.collection_select :payment_method_id,
+                                        @enabled_payment_methods,
+                                        :id,
+                                        :name,
+                                        { prompt: "Select a Payment Method" },
+                                        { class: "form-control", id: "payment-method-select" } %>
+             </div>
+            <div id="payment-method-description" class="text-muted mt-2">
+              <%= @payment_method_description || "Select a payment method to see its description." %>
             </div>
+
             <div id="payment-method-description" class="text-muted mt-2"></div>
-            <%= form.hidden_field :payment_method_description, value: "", id: "payment-method-description-field" %>
 
             <!-- Hidden fields to pass dates and guest count -->
             <%= form.hidden_field :start_date, value: @booking.start_date %>
@@ -249,7 +252,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (paymentMethodSelect) {
     paymentMethodSelect.addEventListener("change", () => {
-      if (paymentMethodSelect.options[paymentMethodSelect.selectedIndex].text === "Stripe") {
+      const selectedPaymentMethod = paymentMethodSelect.options[paymentMethodSelect.selectedIndex].text;
+      if (selectedPaymentMethod === "Stripe") {
         stripeButton.classList.remove("d-none");
         defaultSubmitButton.classList.add("d-none");
       } else {
@@ -264,25 +268,32 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       try {
-        const response = await fetch("<%= create_payment_intent_path %>", {
+        const bookingId = "<%= @booking.id %>"; // Booking ID rendered by Rails
+        const totalPrice = "<%= @total_price %>"; // Total price rendered by Rails
+
+        const response = await fetch("<%= create_payment_intent_payments_path %>", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "X-CSRF-Token": "<%= form_authenticity_token %>",
           },
           body: JSON.stringify({
-            booking_id: <%= @booking.id %>,
-            total_price: <%= @total_price %>,
+            booking_id: bookingId,
+            total_price: totalPrice,
           }),
         });
 
-        if (!response.ok) throw new Error("Payment initiation failed.");
+        if (!response.ok) {
+          const errorDetails = await response.json();
+          throw new Error(errorDetails.message || "Payment initiation failed.");
+        }
+
         const { sessionId } = await response.json();
         const stripe = Stripe("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
         await stripe.redirectToCheckout({ sessionId });
       } catch (error) {
-        alert(error.message);
-        console.error(error);
+        alert("Error during payment: " + error.message);
+        console.error("Stripe Payment Error:", error);
       }
     });
   }
@@ -293,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const stripe = Stripe("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
 
-  fetch("<%= create_payment_intent_path(@booking) %>", {
+  fetch("<%= create_payment_intent_payments_path(@booking) %>", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -308,36 +319,5 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Stripe Error:", error);
       alert("Payment initiation failed. Please try again.");
     });
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const paymentMethodSelect = document.getElementById("payment-method-select");
-  const descriptionDiv = document.getElementById("payment-method-description");
-  const descriptionField = document.getElementById("payment-method-description-field");
-
-  // Object to map payment method IDs to descriptions (this will be embedded dynamically)
-  const paymentMethodDescriptions = {
-    <% PaymentMethod.all.each do |method| %>
-      "<%= method.id %>": "<%= j method.description %>",
-    <% end %>
-  };
-
-  paymentMethodSelect.addEventListener("change", () => {
-    const selectedId = paymentMethodSelect.value;
-
-    // Show the description or clear it if no payment method is selected
-    if (selectedId && paymentMethodDescriptions[selectedId]) {
-      descriptionDiv.innerText = paymentMethodDescriptions[selectedId];
-      if (descriptionField) {
-        descriptionField.value = paymentMethodDescriptions[selectedId];
-      }
-    } else {
-      descriptionDiv.innerText = "";
-      if (descriptionField) {
-        descriptionField.value = "";
-      }
-    }
-  });
 });
 </script>

@@ -1,7 +1,6 @@
 class BookingsController < ApplicationController
   before_action :set_property
   before_action :set_property, except: [ :lookup_customer ]
-  before_action :authenticate_admin!
   before_action :set_settings
   include BookingsHelper
 
@@ -15,12 +14,12 @@ class BookingsController < ApplicationController
   end
 
   def new
-    @enabled_payment_methods = current_admin.payment_methods
     @booking = @property.bookings.new(
       start_date: params[:start_date],
       end_date: params[:end_date],
       guest_count: params[:guest_count]
     )
+    @enabled_payment_methods = EnabledPaymentMethod.includes(:payment_method).map(&:payment_method) || []
 
   if params[:email].present?
     customer = Customer.find_by(email: params[:email])
@@ -58,49 +57,46 @@ class BookingsController < ApplicationController
     end
   end
 
-  def create # Think that i should refix it
-    # Separate customer-related attributes
-    customer_attributes = booking_params.slice(
-      :name, :email, :phone, :address, :country, :zip_code, :city
-    )
+  def create
+    customer_attributes = booking_params.slice(:name, :email, :phone, :address, :country, :zip_code, :city)
+    booking_attributes = booking_params.except(:name, :email, :phone, :address, :country, :zip_code, :city)
 
-    # Remove customer attributes from booking parameters
-    booking_attributes = booking_params.except(
-      :name, :email, :phone, :address, :country, :zip_code, :city
-    )
+    # Find an existing customer or initialize a new one
+    customer = Customer.find_by(email: customer_attributes[:email]) || Customer.new(customer_attributes)
+
+    # Assign a random password for new customers - On email should add restore password functionality
+    if customer.new_record?
+      customer.password = SecureRandom.hex(8)
+      Rails.logger.debug { "Generated Password for New Customer: #{customer.password}" }
+    end
+
+    @enabled_payment_methods = EnabledPaymentMethod.includes(:payment_method).map(&:payment_method) || []
+
+    if customer.new_record?
+      unless customer.save
+        @booking = @property.bookings.new(booking_attributes) # Reinitialize @booking
+        flash.now[:alert] = customer.errors.full_messages.to_sentence
+        render :new and return
+      end
+    end
 
     @booking = @property.bookings.new(booking_attributes)
+    @booking.customer = customer
     @booking.status = 'unpaid'
 
-    customer = find_or_initialize_customer(customer_attributes)
+    assign_total_price
 
-    if customer.save
-      @booking.customer = customer
-      assign_total_price
-
-      # if @booking.save
-      #   BookingMailer.admin_notification(@booking).deliver_now
-      #   BookingMailer.customer_notification(@booking).deliver_now
-      #   redirect_to property_booking_path(@property, @booking), notice: t('.success')
-      # else
-      #   flash.now[:alert] = @booking.errors.full_messages.to_sentence
-      #   render :new
-      # end
-      if @booking.save
-        if @booking.payment_method&.name == 'Stripe'
-          # Redirect to Stripe payment
-          redirect_to create_payment_intent_path(booking_id: @booking.id)        else
-          # Process offline payment
-          BookingMailer.admin_notification(@booking).deliver_now
-          BookingMailer.customer_notification(@booking).deliver_now
-          redirect_to property_booking_path(@property, @booking), notice: t('.success')
-        end
+    if @booking.save
+      if @booking.payment_method&.name == 'Stripe'
+        redirect_to create_payment_intent_path(booking_id: @booking.id)
       else
-        flash.now[:alert] = @booking.errors.full_messages.to_sentence
-        render :new
+        BookingMailer.admin_notification(@booking).deliver_now
+        BookingMailer.customer_notification(@booking).deliver_now
+        redirect_to property_booking_path(@property, @booking), notice: t('.success')
       end
     else
-      flash.now[:alert] = customer.errors.full_messages.to_sentence
+      Rails.logger.debug { "Booking Save Failed: #{@booking.errors.full_messages}" }
+      flash.now[:alert] = @booking.errors.full_messages.to_sentence
       render :new
     end
   end
@@ -182,14 +178,10 @@ status: :ok
     @booking.total_price = price_data[:total_price]
   end
 
-  def find_or_initialize_customer(customer_params)
-    Customer.find_by(email: customer_params[:email]) || Customer.new(customer_params)
-  end
-
   def booking_params
     params.expect(
-      booking: [ :start_date, :end_date, :guest_count, :payment_method_id, :status,
-      :name, :email, :phone, :address, :country, :zip_code, :city ]
+      booking: [ :start_date, :end_date, :guest_count, :payment_method_id,
+      :status, :name, :email, :phone, :address, :country, :zip_code, :city ]
     )
   end
 
