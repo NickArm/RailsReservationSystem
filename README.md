@@ -34,10 +34,7 @@ A web-based application for managing property bookings, customer reservations, i
   - Generate and manage invoices.
   - Display company details and payment status in the invoice layout.
   - View detailed breakdowns of invoice amounts, including taxes.
-- **Login & Authentication**:
-  - Secure login for admins.
-  - Logout option in the sidebar.
-  - Displays error message for invalid login attempts.
+
 
 ### Customer Functionality
 - **Reservation Management**:
@@ -73,7 +70,7 @@ A web-based application for managing property bookings, customer reservations, i
 ### Setup Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/villa-booking-system.git
+   git clone https://github.com/NickArm/RailsReservationSystem.git
    cd villa-booking-system
    ```
 
@@ -101,46 +98,6 @@ A web-based application for managing property bookings, customer reservations, i
    ```
 
 6. Access the application at [http://localhost:3000](http://localhost:3000).
-
----
-
-## Deployment
-
-### Heroku
-1. Add the necessary buildpacks:
-   ```bash
-   heroku buildpacks:add --index 1 heroku/nodejs
-   heroku buildpacks:add --index 2 heroku/ruby
-   ```
-
-2. Push the application to Heroku:
-   ```bash
-   git push heroku main
-   ```
-
-3. Migrate and seed the database:
-   ```bash
-   heroku run rails db:migrate
-   heroku run rails db:seed
-   ```
-
-4. Access the deployed application at your Heroku URL.
-
----
-
-## Contribution
-
-1. Fork the repository.
-2. Create a new branch for your feature:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes and push the branch:
-   ```bash
-   git commit -m "Add feature"
-   git push origin feature-name
-   ```
-4. Open a pull request on GitHub.
 
 ---
 

@@ -110,6 +110,14 @@
 
     <!-- Price Breakdown (30%) -->
     <div class="col-lg-5">
+    <% if @property.main_image.attached? %>
+      <div class="card shadow mb-3">
+        <div class="card-body text-center">
+          <img src="<%= url_for(@property.main_image) %>" class="img-fluid rounded" alt="<%= @property.name %>">
+        </div>
+      </div>
+    <% end %>
+
   <div class="card shadow">
     <div class="card-header bg-info text-white">
       <h4>Price Breakdown</h4>

@@ -6,6 +6,20 @@
     <div class="card-body">
       <%= form_with model: [:admin_panel, @property], local: true, class: "needs-validation", data: { turbo: false } do |f| %>
         <div class="row">
+        <div class="col-md-12 mb-3">
+            <%= f.label :main_image, "Main Image", class: "form-label fw-bold" %>
+
+            <% if @property.main_image.attached? %>
+              <div class="mb-2">
+                <img id="image-preview" src="<%= url_for(@property.main_image) %>" class="img-thumbnail" width="200" alt="Main Image Preview">
+              </div>
+            <% else %>
+              <img id="image-preview" src="#" class="img-thumbnail d-none" width="200" alt="Main Image Preview">
+            <% end %>
+
+            <%= f.file_field :main_image, class: "form-control", id: "image-upload" %>
+          </div>
+
           <!-- Name -->
           <div class="col-md-6 mb-3">
             <%= f.label :name, "Property Name", class: "form-label fw-bold" %>
@@ -141,3 +155,21 @@
     </div>
   </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const imageUpload = document.getElementById("image-upload");
+  const imagePreview = document.getElementById("image-preview");
+
+  imageUpload.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+        imagePreview.classList.remove("d-none");
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+});
+</script>

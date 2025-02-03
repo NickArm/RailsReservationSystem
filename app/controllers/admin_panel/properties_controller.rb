@@ -113,7 +113,7 @@ locals: { errors: [ 'Failed to remove tax' ] }) }
       params.expect(
         property: [ :name, :phone, :address, :country, :description, :contact_email,
         :max_guests, :min_days_stay, :max_days_stay, :weekly_discount,
-        :monthly_discount,
+        :monthly_discount, :main_image,
         taxes_attributes: [ :id, :name, :rate_type, :rate, :application_case, :_destroy ] ]
       )
     end
