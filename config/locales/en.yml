@@ -54,7 +54,7 @@ en:
   search:
     errors:
       no_properties_available: "No houses are available for the selected dates or the stay duration doesn't meet the property's requirements."
-      missing_dates: "Please provide both start and end dates."
+      missing_dates: "Not available house for these dates."
     notices:
       multiple_properties_available: "Multiple houses are available. Please select one."
       search_completed: "Search completed successfully."

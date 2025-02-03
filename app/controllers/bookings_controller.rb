@@ -61,6 +61,15 @@ class BookingsController < ApplicationController
     customer_attributes = booking_params.slice(:name, :email, :phone, :address, :country, :zip_code, :city)
     booking_attributes = booking_params.except(:name, :email, :phone, :address, :country, :zip_code, :city)
 
+    @enabled_payment_methods = EnabledPaymentMethod.includes(:payment_method).map(&:payment_method) || []
+
+    # Check if the property is still available
+    if booking_conflict?(booking_attributes[:start_date], booking_attributes[:end_date])
+      @booking = @property.bookings.new(booking_attributes)
+      flash.now[:alert] = 'Sorry, the property is no longer available for the selected dates.'
+      render :new and return
+    end
+
     # Find an existing customer or initialize a new one
     customer = Customer.find_by(email: customer_attributes[:email]) || Customer.new(customer_attributes)
 
@@ -69,8 +78,6 @@ class BookingsController < ApplicationController
       customer.password = SecureRandom.hex(8)
       Rails.logger.debug { "Generated Password for New Customer: #{customer.password}" }
     end
-
-    @enabled_payment_methods = EnabledPaymentMethod.includes(:payment_method).map(&:payment_method) || []
 
     if customer.new_record?
       unless customer.save
@@ -119,6 +126,12 @@ status: :ok
 
   def set_property
     @property = Property.find(params[:property_id])
+  end
+
+  def booking_conflict?(start_date, end_date)
+    overlapping_bookings = @property.bookings
+                                    .where('start_date < ? AND end_date > ?', end_date, start_date)
+    overlapping_bookings.exists?
   end
 
   def parse_dates(start_date, end_date)

@@ -5,7 +5,6 @@ class SearchController < ApplicationController
     if dates_provided?
       handle_search_results
     else
-      flash[:alert] = t('search.errors.missing_dates')
       @properties = Property.all
       render :index
     end
@@ -18,15 +17,22 @@ class SearchController < ApplicationController
   end
 
   def handle_search_results
+    if params[:start_date].blank? || params[:end_date].blank?
+      @properties = Property.all
+      flash.now[:alert] = t('search.errors.missing_dates')
+      render :index and return
+    end
+
     result = search_available_properties(params)
 
-    if result[:error]
-      flash[:alert] = t('search.errors.missing_dates')
-      render :index
-    else
-      @properties = result[:properties]
-      process_properties
+    if result[:properties].blank?
+      @properties = Property.all
+      flash.now[:alert] = t('search.errors.no_properties_available')
+      render :index and return
     end
+
+    @properties = result[:properties]
+    process_properties
   end
 
   def process_properties
