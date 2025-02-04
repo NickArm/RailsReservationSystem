@@ -7,24 +7,63 @@
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation" }) do |f| %>
         <%= render "customers/shared/error_messages", resource: resource %>
 
+        <!-- Email -->
         <div class="mb-3">
-          <%= f.label :email, class: "form-label" %>
+          <%= f.label :email, class: "form-label fw-bold" %>
           <%= f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email", placeholder: "Enter your email" %>
         </div>
 
+        <!-- Name -->
         <div class="mb-3">
-          <%= f.label :password, class: "form-label" %>
+          <%= f.label :name, "Full Name", class: "form-label fw-bold" %>
+          <%= f.text_field :name, class: "form-control", placeholder: "Enter your full name", required: true %>
+        </div>
+
+        <!-- Phone -->
+        <div class="mb-3">
+          <%= f.label :phone, "Phone Number", class: "form-label fw-bold" %>
+          <%= f.text_field :phone, class: "form-control", placeholder: "Enter your phone number", required: true %>
+        </div>
+
+        <!-- Address -->
+        <div class="mb-3">
+          <%= f.label :address, "Address", class: "form-label fw-bold" %>
+          <%= f.text_area :address, class: "form-control", placeholder: "Enter your address", rows: 2, required: true %>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <%= f.label :country, "Country", class: "form-label fw-bold" %>
+            <%= f.text_field :country, class: "form-control", placeholder: "Enter your country", required: true %>
+          </div>
+          <div class="col-md-6 mb-3">
+            <%= f.label :city, "City", class: "form-label fw-bold" %>
+            <%= f.text_field :city, class: "form-control", placeholder: "Enter your city", required: true %>
+          </div>
+        </div>
+
+        <!-- Zip Code -->
+        <div class="mb-3">
+          <%= f.label :zip_code, "Zip Code", class: "form-label fw-bold" %>
+          <%= f.text_field :zip_code, class: "form-control", placeholder: "Enter your zip code", required: true %>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <%= f.label :password, class: "form-label fw-bold" %>
           <% if @minimum_password_length %>
             <small class="form-text text-muted">(<%= @minimum_password_length %> characters minimum)</small>
           <% end %>
-          <%= f.password_field :password, class: "form-control", autocomplete: "new-password", placeholder: "Enter your password" %>
+          <%= f.password_field :password, class: "form-control", autocomplete: "new-password", placeholder: "Enter your password", required: true %>
         </div>
 
+        <!-- Confirm Password -->
         <div class="mb-3">
-          <%= f.label :password_confirmation, "Confirm Password", class: "form-label" %>
-          <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", placeholder: "Confirm your password" %>
+          <%= f.label :password_confirmation, "Confirm Password", class: "form-label fw-bold" %>
+          <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", placeholder: "Confirm your password", required: true %>
         </div>
 
+        <!-- Submit Button -->
         <div class="d-grid">
           <%= f.submit "Sign up", class: "btn btn-primary btn-lg" %>
         </div>

@@ -13,7 +13,8 @@
   },
   "scripts": {
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css",
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets"
+    "build": "esbuild app/javascript/application.js --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets && esbuild app/javascript/admin/application.js --bundle --sourcemap --format=esm --outdir=app/assets/builds/admin --public-path=/assets/admin",
+    "build:watch": "esbuild app/javascript/application.js --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch && esbuild app/javascript/admin/application.js --bundle --sourcemap --format=esm --outdir=app/assets/builds/admin --public-path=/assets --watch"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

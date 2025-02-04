@@ -1,8 +1,11 @@
 <div class="container mt-5">
   <div class="row mb-4">
     <% if customer_signed_in? %>
-      <div class="col-12 text-start">
+      <div class="col-6 text-start">
         <h4 class="text-primary">Hi, <%= current_customer.name %>!</h4>
+      </div>
+      <div class="col-6 text-end">
+        <%= link_to "Logout", destroy_customer_session_path, method: :delete, class: "btn btn-outline-danger btn-lg" %>
       </div>
     <% else %>
       <div class="col-md-6 text-start">
