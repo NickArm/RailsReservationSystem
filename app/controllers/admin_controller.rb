@@ -1,6 +1,7 @@
 class AdminController < ApplicationController
   before_action :authenticate_admin!
   before_action :load_settings
+
   layout 'admin'
 
   def dashboard

@@ -1,7 +1,8 @@
 class BookingsController < ApplicationController
   before_action :set_property
-  before_action :set_property, except: [ :lookup_customer ]
   before_action :set_settings
+  before_action :set_countries, only: [ :new, :create ]
+
   include BookingsHelper
 
   def index
@@ -119,6 +120,12 @@ status: :ok
   end
 
   private
+
+  def set_countries
+    @countries = ISO3166::Country.all.map do |country|
+      [ country.translations[I18n.locale.to_s] || country.name, country.alpha2 ]
+    end.sort_by { |c| c[0] }
+  end
 
   def set_settings
     @settings = Setting.first_or_initialize

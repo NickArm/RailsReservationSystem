@@ -5,6 +5,8 @@ module AdminPanel
     before_action :set_booking, only: %i[show edit update destroy]
     before_action :load_payment_methods, only: %i[edit update]
     before_action :set_settings
+    before_action :set_countries
+
     layout 'admin'
 
     def index
@@ -79,6 +81,10 @@ module AdminPanel
     end
 
     private
+
+    def set_countries
+      @countries = ISO3166::Country.all.map { |country| [ country.translations[I18n.locale.to_s] || country.name, country.alpha2 ] }.sort_by { |c| c[0] }
+    end
 
     def set_settings
       @settings = Setting.first_or_initialize

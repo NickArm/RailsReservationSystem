@@ -1,5 +1,6 @@
 class CustomersController < ApplicationController
     before_action :store_booking_referrer, only: [ :profile ]
+    before_action :set_countries
 
     def profile
       @customer = current_customer

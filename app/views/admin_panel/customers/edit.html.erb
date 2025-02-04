@@ -27,8 +27,8 @@
         </div>
         <div class="mb-3">
           <%= form.label :country, "Country", class: "form-label" %>
-          <%= form.text_field :country, class: "form-control", placeholder: "Enter customer country" %>
-        </div>
+          <%= form.select :country, options_for_select(@countries, form.object.country), { include_blank: "Select a Country" }, class: "form-control" %>
+         </div>
         <div class="mb-3">
           <%= form.label :city, "City", class: "form-label" %>
           <%= form.text_field :city, class: "form-control", placeholder: "Enter city" %>

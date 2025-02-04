@@ -33,8 +33,8 @@
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <%= f.label :country, "Country", class: "form-label fw-bold" %>
-            <%= f.text_field :country, class: "form-control", placeholder: "Enter your country", required: true %>
+            <%= f.label :country, class: "form-label" %>
+            <%= f.select :country, options_for_select(@countries, f.object.country), { include_blank: "Select a Country" }, class: "form-control" %>
           </div>
           <div class="col-md-6 mb-3">
             <%= f.label :city, "City", class: "form-label fw-bold" %>

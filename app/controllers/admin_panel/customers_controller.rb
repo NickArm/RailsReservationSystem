@@ -2,6 +2,8 @@ module AdminPanel
   class CustomersController < ApplicationController
     before_action :authenticate_admin!
     before_action :set_customer, only: %i[edit update reservations]
+    before_action :set_countries, only: %i[new edit update]
+
     layout 'admin'
 
     def index
@@ -41,6 +43,10 @@ module AdminPanel
 
     def set_customer
       @customer = Customer.find(params[:id])
+    end
+
+    def set_countries
+      @countries = ISO3166::Country.all.map { |country| [ country.translations[I18n.locale.to_s] || country.name, country.alpha2 ] }.sort_by { |c| c[0] }
     end
 
     def customer_params

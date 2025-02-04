@@ -49,9 +49,13 @@
               <%= form.text_area :address, id: "customer-address-field", class: "form-control", placeholder: "Enter your address", value: (customer_signed_in? ? current_customer.address : ""), readonly: customer_signed_in? %>
             </div>
             <div class="mb-3">
-              <%= form.label :country, "Your Country", class: "form-label" %>
-              <%= form.text_field :country, id: "customer-country-field", class: "form-control", placeholder: "Enter your country", value: (customer_signed_in? ? current_customer.country : ""), readonly: customer_signed_in? %>
+              <%= form.label :country, "Country", class: "form-label" %>
+              <%= form.select :country,
+                              options_for_select(@countries, customer_signed_in? ? current_customer.country : nil),
+                              { include_blank: "Select a Country" },
+                              { class: "form-control", id: "customer-country-field", readonly: customer_signed_in? } %>
             </div>
+
             <div class="mb-3">
               <%= form.label :city, "City", class: "form-label" %>
               <%= form.text_field :city, id: "customer-city-field", class: "form-control", placeholder: "Enter your city", value: (customer_signed_in? ? current_customer.city : ""), readonly: customer_signed_in? %>
