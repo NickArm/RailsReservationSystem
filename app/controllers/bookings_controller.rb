@@ -47,8 +47,7 @@ class BookingsController < ApplicationController
 
         price_data = calculate_price_breakdown(@property, parsed_dates[:start], parsed_dates[:end])
         set_price_details(price_data, parsed_dates[:start], parsed_dates[:end])
-      rescue StandardError => e
-        Rails.logger.error "Error in processing booking: #{e.message}"
+      rescue StandardError
         set_empty_price_details
         flash.now[:alert] = t('.invalid_dates')
       end
@@ -77,7 +76,6 @@ class BookingsController < ApplicationController
     # Assign a random password for new customers - On email should add restore password functionality
     if customer.new_record?
       customer.password = SecureRandom.hex(8)
-      Rails.logger.debug { "Generated Password for New Customer: #{customer.password}" }
     end
 
     if customer.new_record?
@@ -103,7 +101,6 @@ class BookingsController < ApplicationController
         redirect_to property_booking_path(@property, @booking), notice: t('.success')
       end
     else
-      Rails.logger.debug { "Booking Save Failed: #{@booking.errors.full_messages}" }
       flash.now[:alert] = @booking.errors.full_messages.to_sentence
       render :new
     end

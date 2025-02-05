@@ -87,6 +87,32 @@ Rails.application.configure do
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
-  config.action_mailer.perform_deliveries = false
-  config.action_mailer.delivery_method = :test
+  config.action_mailer.delivery_method = :smtp
+
+  # Load SMTP settings from the database
+  config.to_prepare do
+    begin
+      Rails.logger.info "Initializing SMTP settings for production..."
+      settings = Setting.first
+      if settings&.smtp_address.present?
+        config.action_mailer.smtp_settings = {
+          address: settings.smtp_address,
+          port: settings.smtp_port,
+          domain: settings.smtp_domain,
+          user_name: settings.smtp_user_name,
+          password: settings.smtp_password,
+          authentication: settings.smtp_authentication.presence || "plain",
+          enable_starttls_auto: settings.smtp_enable_starttls,
+          ssl: settings.ssl || false
+        }
+        Rails.logger.info "Custom SMTP settings applied in production."
+      else
+        Rails.logger.error "SMTP settings are not configured in the database!"
+      end
+    rescue => e
+      Rails.logger.error "Error initializing SMTP settings in production: #{e.message}"
+    end
+  end
+
+  config.action_mailer.default_url_options = { host: 'armenisnick.gr' }
 end

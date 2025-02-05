@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_31_161757) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_05_194332) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -164,6 +164,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_31_161757) do
     t.string "company_postcode"
     t.string "company_email"
     t.string "notifications_email"
+    t.string "smtp_address"
+    t.integer "smtp_port"
+    t.string "smtp_domain"
+    t.string "smtp_user_name"
+    t.string "smtp_password"
+    t.string "smtp_authentication"
+    t.boolean "smtp_enable_starttls"
+    t.boolean "ssl", default: false, null: false
   end
 
   create_table "taxes", force: :cascade do |t|
