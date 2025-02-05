@@ -4,7 +4,7 @@ class AdminController < ApplicationController
 
   layout 'admin'
 
-  def dashboard
+  def index
     @properties = current_admin.properties
 
     @upcoming_bookings = Booking.includes(:property)
@@ -16,6 +16,8 @@ class AdminController < ApplicationController
     @total_customers = Customer.count
     @upcoming_bookings_dashboard = Booking.where(start_date: Time.zone.today..).count
     @total_income = Booking.sum(:total_price)
+
+    render 'admin_panel/dashboard/index'
   end
 
   private
