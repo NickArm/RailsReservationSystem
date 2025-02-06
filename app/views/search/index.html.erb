@@ -1,4 +1,5 @@
 <div class="container mt-5">
+  <!-- Search Form -->
   <div class="row mb-4">
     <% if customer_signed_in? %>
       <div class="col-6 text-start">
@@ -16,50 +17,105 @@
       </div>
     <% end %>
   </div>
+
+  <!-- Search Form Card -->
   <div class="card shadow">
     <div class="card-header bg-primary text-white">
-      <h2 class="text-center mb-0"><i class="bi bi-search"></i> Search for you stay</h2>
+      <h6 class="text-center mb-0"><i class="bi bi-search"></i>Availability Search</h6>
     </div>
     <div class="card-body">
       <%= form_with url: search_path, method: :get, local: true do |form| %>
         <div class="row">
           <div class="col-md-4 mb-3">
-            <%= form.label :start_date, "Arrival Date", class: "form-label" %>
-            <%= form.date_field :start_date, id: "start-date", class: "form-control", placeholder: "YYYY-MM-DD", required: true, min: Date.today %>
-            <div class="form-text text-muted">Select your check-in date.</div>
+            <%= form.label :start_date, "Check-in", class: "form-label" %>
+            <%= form.date_field :start_date, id: "start-date", class: "form-control", required: true %>
           </div>
           <div class="col-md-4 mb-3">
-            <%= form.label :end_date, "Departure Date", class: "form-label" %>
-            <%= form.date_field :end_date, id: "end-date", class: "form-control", placeholder: "YYYY-MM-DD", required: true %>
-            <div class="form-text text-muted">Select your check-out date.</div>
+            <%= form.label :end_date, "Check-out", class: "form-label" %>
+            <%= form.date_field :end_date, id: "end-date", class: "form-control", required: true %>
           </div>
           <div class="col-md-4 mb-3">
             <%= form.label :guest_count, "Number of Guests", class: "form-label" %>
-            <%= form.number_field :guest_count, class: "form-control", min: 1, max: Property.maximum(:max_guests), required: true %>
-            <div class="form-text text-muted">Enter the number of guests.</div>
+            <%= form.number_field :guest_count, class: "form-control", min: 1 %>
           </div>
         </div>
         <div class="text-center mt-4">
-          <%= form.submit "Search Properties", class: "btn btn-primary btn-lg w-100" %>
+          <%= form.submit "Search", class: "btn btn-primary btn-lg w-100" %>
         </div>
       <% end %>
     </div>
   </div>
-</div>
+  <div class="container mt-5">
+
+
+  <% if @properties.present? %>
+  <div class="mt-5">
+    <% @properties.each do |property| %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <% if property.main_image.attached? %>
+                <img src="<%= url_for(property.main_image) %>" class="img-fluid rounded" alt="<%= property.name %>">
+              <% else %>
+                <img src="/default-placeholder.png" class="img-fluid rounded" alt="No Image Available">
+              <% end %>
+            </div>
+            <div class="col-md-9">
+              <h4><%= property.name %></h4>
+              <p>Address: <%= property.address %></p>
+              <table class="table table-bordered mt-3">
+                <thead>
+                  <tr>
+                    <% (@start_date..@end_date).each do |date| %>
+                      <th><%= date.strftime('%a, %b %d') %></th>
+                    <% end %>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <% (@start_date..@end_date).each do |date| %>
+                      <% breakdown = calculate_price_breakdown(property, @start_date, @end_date) %>
+                      <% daily_price = breakdown[:breakdown].find { |entry| entry[:date] == date }&.dig(:price) %>
+                      <td>
+                        <% if daily_price %>
+                          <%= number_to_currency(daily_price, unit: currency_symbol(@settings&.currency || 'usd')) %>
+                        <% else %>
+                          <span class="text-muted">Not Available</span>
+                        <% end %>
+                      </td>
+                    <% end %>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                Total Price (include all taxes & fees):
+                <strong><%= number_to_currency(calculate_price_breakdown(property, @start_date, @end_date)[:total_price], unit: currency_symbol(@settings&.currency || 'usd')) %></strong>
+              </p>
+              <div class="text-end">
+                <%= link_to "Book Now", new_property_booking_path(property, start_date: params[:start_date], end_date: params[:end_date], guest_count: params[:guest_count]), class: "btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="alert alert-info mt-4">
+    <strong>Search for you ideal stay</strong>
+  </div>
+<% end %>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const startDateField = document.getElementById("start-date");
-    const endDateField = document.getElementById("end-date");
+    const rows = document.querySelectorAll("table.table-striped tbody tr");
 
-    // Disable selecting dates before today for the start date
-    const today = new Date().toISOString().split("T")[0];
-    startDateField.setAttribute("min", today);
-
-    // Update the "min" attribute of the end date when the start date changes
-    startDateField.addEventListener("change", () => {
-      const startDateValue = startDateField.value;
-      endDateField.setAttribute("min", startDateValue);
+    rows.forEach(row => {
+      row.addEventListener("click", () => {
+        rows.forEach(r => r.classList.remove("table-active"));
+        row.classList.add("table-active");
+      });
     });
   });
 </script>
